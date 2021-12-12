@@ -11,7 +11,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     exit;
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $oldpass = $_POST['oldpass'];

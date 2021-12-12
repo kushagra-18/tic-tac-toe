@@ -1,6 +1,13 @@
 <?php
 include 'dbconnect.php';
 
+session_start();
+
+if (isset($_SESSION['loggedin'])) {
+    header("location: welcome.php");
+    exit;
+}
+
 $exists = false;
 $showAlert = false;
 $showError = "";
@@ -25,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 }
 
-
 ?>
 
 
@@ -40,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     
-
     <style>
         body {
             background-image: url("images/background.jpg");
@@ -63,11 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
    <center><h1>
        <font color = "white">Tic-Tac-Toe</font>
    </h1>
-
-   <?php
-
-    ?>
-
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">

@@ -1,6 +1,13 @@
 <?php
 $login = false;
 $showError = false;
+session_start();
+
+if (isset($_SESSION['loggedin'])) {
+    header("location: welcome.php");
+    exit;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include 'dbconnect.php';
     
@@ -18,6 +25,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         session_start();
         $_SESSION['loggedin'] = true;
         $_SESSION['username'] = $username;
+
+        $sql = "UPDATE leaderboard SET status = 'Online' WHERE username = '$username'";
+        $result = mysqli_query($conn, $sql);
+
         header("location: welcome.php");
     } else {
         $showError = "Invalid Credentials";

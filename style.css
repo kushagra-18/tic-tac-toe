@@ -1,0 +1,42 @@
+h3{
+        font-size: 50px;
+    }
+    .tct-container {
+        min-height: 500px;
+        margin: 0 auto;
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+    }
+    .tct-table{
+        border-collapse: separate;
+    }
+
+    .tct-table th, td {
+        padding: 20px;
+    }
+
+    .tct-form {
+        margin: 0 auto;
+        display: inline-block;
+        padding: 20px;
+    }
+
+    .tct-form button {
+        font-size: 25px;
+    }
+
+    .tct-form select {
+        font-size: 35px;
+    }
+
+    .tct-message {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 30px;
+        background: #f6f6f6;
+        font-weight: bold;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 20px;
+        color: darkred;
+    }

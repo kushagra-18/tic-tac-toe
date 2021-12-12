@@ -29,36 +29,38 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
 
 <body>
 
-
     <center>
+        <font color = "white">
+            
         <h1>
             Tic-Tac-Toe Global Leaderboard
             <br </h1>
 
 
-            <table class="table table-striped">
+            <table class="table table-striped table-dark">
                 <thead>
-                    <tr>
-                        <th scope="col">Status</th>
+                    <tr><th scope="col">Status</th>
+                        <th scope="col">Ranking</th>
                         <th scope="col">Full Name</th>
                         <th scope="col">Username</th>
                         <th scope="col">Score</th>
                     </tr>
                 </thead>
-
-
-
                 <tbody>
                 
                 <?php
                     
                     $result = mysqli_query($conn, "SELECT * FROM leaderboard INNER JOIN sign_up on leaderboard.username = sign_up.username ORDER BY score DESC");
 
+                    $count = 0;
+
                    while ($row = mysqli_fetch_array($result)) {
 
                   //  echo $result;
                    echo '<tr>';
-                       echo '<th scope="row">1</th>';
+                    //    echo '<th scope='row'>". $row['name'] ."</th>';
+                    echo "<td> ". $row['status'] ."</td>";
+                       echo "<td> ". ++$count ."</td>";
                        echo "<td> ". $row['name'] ."</td>";
                        echo "<td> ". $row['username'] ."</td>";
                        echo "<td> ". $row['score'] ."</td>";
@@ -69,6 +71,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
                     ?>
                 </tbody>
             </table>
+        </font>
+    </center>
 
 
 </body>
