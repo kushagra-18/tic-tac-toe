@@ -24,53 +24,47 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 
 </head>
 
 <body>
 
     <center>
-        <font color = "white">
-            
-        <h1>
-            Tic-Tac-Toe Global Leaderboard
-            <br </h1>
+        <font color="white">
+
+            <h1>
+                Tic-Tac-Toe Global Leaderboard
+                <br>
+            </h1>
 
 
             <table class="table table-striped table-dark">
                 <thead>
-                    <tr><th scope="col">Status</th>
+                    <tr>
+                        <th scope="col">Status</th>
                         <th scope="col">Ranking</th>
                         <th scope="col">Full Name</th>
                         <th scope="col">Username</th>
                         <th scope="col">Score</th>
                     </tr>
                 </thead>
-                <tbody>
-                
-                <?php
-                    
-                    $result = mysqli_query($conn, "SELECT * FROM leaderboard INNER JOIN sign_up on leaderboard.username = sign_up.username ORDER BY score DESC");
+                <tbody id="responds">
 
-                    $count = 0;
 
-                   while ($row = mysqli_fetch_array($result)) {
-
-                  //  echo $result;
-                   echo '<tr>';
-                    //    echo '<th scope='row'>". $row['name'] ."</th>';
-                    echo "<td> ". $row['status'] ."</td>";
-                       echo "<td> ". ++$count ."</td>";
-                       echo "<td> ". $row['name'] ."</td>";
-                       echo "<td> ". $row['username'] ."</td>";
-                       echo "<td> ". $row['score'] ."</td>";
-                       echo " </tr>";
-                   };
-
-                   mysqli_close($conn);
-                    ?>
                 </tbody>
             </table>
+
+            <script>
+                setInterval(function() {
+
+                    $.get('scoreTable.php', function(data) {
+                        $('#responds').html(data);
+                    });
+
+                }, 100);
+            </script>
         </font>
     </center>
 
