@@ -1,0 +1,68 @@
+@import url(//fonts.googleapis.com/css?family=Roboto&display=swap);
+
+body, input, button {
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    color: #333;
+}
+
+button {
+    background-color: #ff3111;
+    color: #FFF;
+    border: 0;
+    border-radius: 10px;
+    padding: 1em 2em;
+    cursor: pointer;
+}
+
+button[disabled] {
+    cursor: not-allowed;
+    opacity: .5;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+
+.wrapper td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.tic-tac-toe {
+    margin: 3em;
+}
+
+.tic-tac-toe td {
+    border: 2px solid white;
+    width: 110px;
+    height: 110px;
+}
+
+.tic-tac-toe .vertical-border {
+    border-left-color: #eee;
+    border-right-color: #eee;
+}
+
+.tic-tac-toe .horizontal-border {
+    border-top-color: #eee;
+    border-bottom-color: #eee;
+}
+
+.tic-tac-toe .center-border {
+    border-color: #eee;
+}
+
+.welcome .player-name {
+    margin: 30px 0;
+}
+
+.reset-btn {
+    display: inline-block;
+    font-size: 8pt;
+    color: red;
+    margin-top: 30px;
+}

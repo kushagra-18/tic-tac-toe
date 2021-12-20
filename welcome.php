@@ -2,8 +2,9 @@
 $login = false;
 $showError = false;
 session_start();
-include 'dbconnect.php';
-include 'navBar.php';
+include 'backend/dbconnect.php';
+include 'backend/navBar.php';
+include  'backend/functions.php';
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     header("location: login.php");
@@ -12,161 +13,22 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
 
 ?>
 
-<!-- PHP CODE FOR GAME LOGIC -->
-
 <?php
 
-$last = null;
-$message = "";
-$defaultboard = [
-    [3, 3, 3],
-    [3, 3, 3],
-    [3, 3, 3]
-];
+if ($_POST['cell']) {
+    $win = play($_POST['cell']);
 
-$board = [
-    [3, 3, 3],
-    [3, 3, 3],
-    [3, 3, 3]
-];
-
-$win_conditions = [
-    [[0, 0], [0, 1], [0, 2]],
-    [[1, 0], [1, 1], [1, 2]],
-    [[2, 0], [2, 1], [2, 2]],
-    [[0, 0], [1, 0], [2, 0]],
-    [[0, 1], [1, 1], [2, 1]],
-    [[0, 2], [1, 2], [2, 2]],
-    [[0, 0], [1, 1], [2, 2]],
-    [[0, 2], [1, 1], [2, 0]],
-];
-
-function create_tile($value, $id)
-{
-    $o = "";
-    $name = "row_" . $id;
-    $realValue = null;
-    if ($value == 0) {
-        $realValue = "O";
-    } else if ($value == 1) {
-        $realValue = "X";
-    } else {
-        $realValue = "select";
+    if ($win) {
+        header("location: result.php?player=" . getTurn());
     }
-    if ($value == 0 || $value == 1) {
-        $o .= "<input type='hidden' name='" . $name . "' value='" . $realValue . "'/>";
-        $o .= "<select disabled='disabled'>";
-    } else {
-        $o .= "<select name='" . $name . "'>";
-    }
-    $o .= "<option>select</option>";
-    if ($value == 0) {
-        $o .= "<option selected='selected'>O</option>";
-    } else {
-        $o .= "<option>O</option>";
-    }
-    if ($value == 1) {
-        $o .= "<option selected='selected'>X</option>";
-    } else {
-        $o .= "<option>X</option>";
-    }
-    $o .= "</select>";
-    return $o;
 }
 
-function check_winner($conditions, $response)
-{
-    $lr = null;
-    $matches = [];
-    for ($i = 0; $i <= count($conditions) - 1; $i++) {
-        foreach ($conditions[$i] as $rows) {
-            $x = $rows[0];
-            $y = $rows[1];
-            if ($response[$x][$y] != 3) {
-                if ($lr == $response[$x][$y] || $lr == null) {
-                    $matches[] = $response[$x][$y];
-                    $lr = $response[$x][$y];
-                } else {
-                    $lr = null;
-                    $matches = [];
-                    continue;
-                }
-            }
-        }
-        if (count($matches) == 3) {
-            if ($matches[0] == $matches[1] && $matches[1] == $matches[2]) {
-                return true;
-            } else {
-                $matches = [];
-                $lr = null;
-            }
-        } else {
-            $matches = [];
-            $lr = null;
-        }
-    }
-    return false;
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['start'])) {
-    $board = $defaultboard;
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['play'])) {
-    $board = isset($_POST['board']) ? json_decode($_POST['board']) : [];
-    $last = isset($_POST['last']) ? $_POST['last'] : null;
-    $responses = [];
-    $rowarray = [];
-    $counter = 0;
-
-    foreach ($_POST as $key => $value) {
-        if (!in_array($key, ["board", "play", 'last'])) {
-            if ($value == 'O') {
-                // echo $value;
-                $rowarray[] = 0;
-            } else if ($value == 'X') {
-                $rowarray[] = 1;
-            } else {
-                $rowarray[] = 3;
-            }
-            $counter++;
-            if ($counter % 3 == 0) {
-                $responses[] = $rowarray;
-                $rowarray = [];
-            }
-        }
-    }
-
-    $changes = [];
-    for ($i = 0; $i <= count($board) - 1; $i++) {
-        foreach ($board[$i] as $key => $value) {
-            if ($value != $responses[$i][$key]) {
-                $changes[] = $responses[$i][$key];
-            }
-        }
-    }
-
-    if (count($changes) > 1) {
-        $message .= "Cant play more than once";
-    } else if ($last !=  null  && $last == $changes[0]) {
-        $message .= "You cannot play twice";
-    } else if (check_winner($win_conditions, $responses)) {
-        $last = $changes[0];
-        $winner = null;
-        if ($last == 1) {
-            $winner = "X";
-        } else if ($last == 0) {
-            $winner = "O";
-        }
-        $board = $responses;
-        $message .= 'WE HAVE A WINNER!  ';
-        $message .= "THE WINNER IS :" .  $winner;
-    } else {
-        $last = $changes[0];
-        $board = $responses;
-    }
+if (playsCount() >= 9) {
+    header("location: result.php");
 }
 ?>
+
+<!-- PHP CODE FOR GAME LOGIC -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -184,60 +46,89 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['play'])) {
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href = "style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
     <center>
-        <font color = "white">
-        <h2>
-            Tic-Tac-Toe
-            <?php
-            echo "<br>";
-            echo "Welcome ";
-            echo $_SESSION['username'];
+        <font color="white">
+            <h2>
+                <br>
+                Tic-Tac-Toe
+                <?php
+                echo "<br>";
+                echo "Welcome ";
+                echo $_SESSION['username'];
 
-            ?>
-            </font>
+                ?>
+        </font>
         </h1>
 
         <hr>
-        
+
+        <h4><?php echo currentPlayer() ?>'s turn</h4>
         <!-- Tic Tac Toe main game layout starts -->
 
-        <div class="tct-container">
-    <form method="post" class="tct-form">
-        <?php if($message):?>
-            <p class="tct-message"><?php echo $message;?></p>
-        <?php endif;?>
-        <button type="submit" name="start">Start New Game</button><br><br>
-        <input name="board" type="hidden" value="<?php echo json_encode($board);?>"/>
-        <input name="last" type="hidden" value="<?php echo $last;?>"/>
-        <table class="tct-table" border="1">
-            <?php $count=1; foreach($board as $row): ?>
+        <form method="post" action="welcome.php">
 
-                <tr>
-                    <?php foreach($row as $tile):?>
-                        <td>
-                            <?php echo create_tile($tile, $count);?>
+            <table class="tic-tac-toe" cellpadding="0" cellspacing="0">
+                <tbody>
+
+                    <?php
+                    $lastRow = 0;
+                    for ($i = 1; $i <= 9; $i++) {
+                        $row = ceil($i / 3);
+
+                        if ($row !== $lastRow) {
+                            $lastRow = $row;
+
+                            if ($i > 1) {
+                                echo "</tr>";
+                            }
+
+                            echo "<tr class='row-{$row}'>";
+                        }
+
+                        $additionalClass = '';
+
+                        if ($i == 2 || $i == 8) {
+                            $additionalClass = 'vertical-border';
+                        } else if ($i == 4 || $i == 6) {
+                            $additionalClass = 'horizontal-border';
+                        } else if ($i == 5) {
+                            $additionalClass = 'center-border';
+                        }
+                    ?>
+
+                        <td class="cell-<?= $i ?> <?= $additionalClass ?>">
+                            <?php if (getCell($i) === 'x') : ?>
+                                X
+                            <?php elseif (getCell($i) === 'o') : ?>
+                                O
+                            <?php else : ?>
+                                <center>
+                                <input type="radio" name="cell" value="<?= $i ?>" onclick="enableButton()" />
+                                </center>
+                            <?php endif; ?>
                         </td>
-                        <?php $count++; endforeach;?>
-                </tr>
 
-            <?php endforeach;?>
-        </table>
-        <br>
-        <button name="play">End Turn</button>
-    </form>
-</div>
+                    <?php } ?>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type="submit" disabled id="play-btn">Play</button>
+
+        </form>
         <!-- Tic Tac Toe main game layout ends -->
 
         <footer class="footer mt-auto py-3 bg-dark">
-  <div class="container">
-    <span class="text-muted">By Kushagra Sharma</span>
-  </div>
-</footer>
+            <div class="container">
+                <span class="text-muted">By Kushagra Sharma</span>
+            </div>
+        </footer>
 
 </body>
 
