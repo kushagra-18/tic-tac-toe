@@ -19,7 +19,8 @@ if ($_POST['cell']) {
     $win = play($_POST['cell']);
 
     if ($win) {
-        header("location: result.php?player=" . getTurn());
+        echo "<script>alert('You win!');</script>";
+        // header("location: result.php?player=" . getTurn());
     }
 }
 
@@ -108,7 +109,7 @@ if (playsCount() >= 9) {
                                 O
                             <?php else : ?>
                                 <center>
-                                <input type="radio" name="cell" value="<?= $i ?>" onclick="enableButton()" />
+                                    <input type="radio" name="cell" value="<?= $i ?>" onclick="enableButton()" />
                                 </center>
                             <?php endif; ?>
                         </td>
@@ -131,5 +132,12 @@ if (playsCount() >= 9) {
         </footer>
 
 </body>
+
+<script type="text/javascript">
+    function enableButton() {
+        document.getElementById('play-btn').disabled = false;
+    }
+</script>
+
 
 </html>
