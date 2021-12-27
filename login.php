@@ -10,7 +10,7 @@ if (isset($_SESSION['loggedin'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include 'backend/dbconnect.php';
-    
+
     $username = $_POST["username"];
     $password = $_POST["password"];
 
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "Select * from sign_up where username='$username' AND password='$password'";
     // $sql = "Select * from users where username='$username'";
     $result = mysqli_query($conn, $sql);
-   // echo $result;
+    // echo $result;
     $num = mysqli_num_rows($result);
     if ($num || $num == 1) {
         $login = true;
@@ -31,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         header("location: welcome.php");
     } else {
+        $showAlert = true;
         $showError = "Invalid Credentials";
     }
 }
@@ -97,6 +98,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <a href=sign_up.php>New user?</a>
                                 <br>
                                 <br>
+                                <?php
+                                if ($showError) {
+                                echo "<div class='alert alert-danger'>
+                                    <strong>Error!</strong> $showError
+                                </div>";
+                                }
+                                ?>
                                 <button type="submit" class="btn btn-primary">Log in</button>
                             </form>
                         </div>

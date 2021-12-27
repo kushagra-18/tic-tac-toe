@@ -13,22 +13,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
 
 ?>
 
-<?php
-
-if ($_POST['cell']) {
-    $win = play($_POST['cell']);
-
-    if ($win) {
-        echo "<script>alert('You win!');</script>";
-        // header("location: result.php?player=" . getTurn());
-    }
-}
-
-if (playsCount() >= 9) {
-    header("location: result.php");
-}
-?>
-
 <!-- PHP CODE FOR GAME LOGIC -->
 
 <!DOCTYPE html>
@@ -71,58 +55,11 @@ if (playsCount() >= 9) {
         <h4><?php echo currentPlayer() ?>'s turn</h4>
         <!-- Tic Tac Toe main game layout starts -->
 
-        <form method="post" action="welcome.php">
+      
 
-            <table class="tic-tac-toe" cellpadding="0" cellspacing="0">
-                <tbody>
+            <!-- <button type="submit" disabled id="play-btn">Play</button>
 
-                    <?php
-                    $lastRow = 0;
-                    for ($i = 1; $i <= 9; $i++) {
-                        $row = ceil($i / 3);
-
-                        if ($row !== $lastRow) {
-                            $lastRow = $row;
-
-                            if ($i > 1) {
-                                echo "</tr>";
-                            }
-
-                            echo "<tr class='row-{$row}'>";
-                        }
-
-                        $additionalClass = '';
-
-                        if ($i == 2 || $i == 8) {
-                            $additionalClass = 'vertical-border';
-                        } else if ($i == 4 || $i == 6) {
-                            $additionalClass = 'horizontal-border';
-                        } else if ($i == 5) {
-                            $additionalClass = 'center-border';
-                        }
-                    ?>
-
-                        <td class="cell-<?= $i ?> <?= $additionalClass ?>">
-                            <?php if (getCell($i) === 'x') : ?>
-                                X
-                            <?php elseif (getCell($i) === 'o') : ?>
-                                O
-                            <?php else : ?>
-                                <center>
-                                    <input type="radio" name="cell" value="<?= $i ?>" onclick="enableButton()" />
-                                </center>
-                            <?php endif; ?>
-                        </td>
-
-                    <?php } ?>
-
-                    </tr>
-                </tbody>
-            </table>
-
-            <button type="submit" disabled id="play-btn">Play</button>
-
-        </form>
+        </form> -->
         <!-- Tic Tac Toe main game layout ends -->
 
         <footer class="footer mt-auto py-3 bg-dark">
