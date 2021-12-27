@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <br>
                                 <?php
                                 if ($showError) {
-                                echo "<div class='alert alert-danger'>
+                                    echo "<div class='alert alert-danger'>
                                     <strong>Error!</strong> $showError
                                 </div>";
                                 }
@@ -111,7 +111,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
             </div>
-
 </body>
 
 </html>

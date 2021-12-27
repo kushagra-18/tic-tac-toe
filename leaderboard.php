@@ -57,12 +57,12 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
             </table>
 
             <script>
-                setInterval(function() {
+
+                setInterval(function firstTime() {
 
                     $.get('scoreTable.php', function(data) {
                         $('#responds').html(data);
                     });
-
                 }, 100);
             </script>
         </font>

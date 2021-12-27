@@ -38,9 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $showError = "Password must include at least one uppercase letter";
     } else if (!preg_match("#[a-z]+#", $pass)) {
         $showError = "Password must include at least one lowercase letter";
-    }else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $showError = "Invalid email format";
-    }else if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
+    } else if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
         $showError = "Username must contain only letters and numbers";
     } else if ($exists == true) {
         // $showAlert = true;
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <form action="sign_up.php" method="post">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input id="username" type="text" class="form-control" name="username" placeholder="User Name" required>
+                                    <input data-toggle="tooltip" data-placement="top" title="Make sure your Username is unique and contains only letters and numbers" id="username" type="text" class="form-control" name="username" placeholder="User Name" required>
 
                                 </div>
                                 <br>
@@ -123,13 +123,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <br>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                                    <input id="email" type="text" class="form-control" name="email" placeholder="Email" required>
+                                    <input data-toggle="tooltip" data-placement="top" title="Make sure your Email is unique" id="email" type="text" class="form-control" name="email" placeholder="Email" onchange="validateEmail(this);" required>
+                                    <label id="labelEmailText" style="visibility: hidden; color:red"></label></span></td>
                                 </div>
                                 <br>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                    <input id="password" type="password" class="form-control" name="password" required placeholder="Password">
-                                    
+                                    <input data-toggle="tooltip" data-placement="top" title="Choose a strong password with minimum length of 8, must have a special (@#$%!&), lowercase (a-b), uppercase (A-B) characters and numbers (1-9)." id="password" type="password" class="form-control" name="password" onchange="validatePassword(this)" required placeholder="Password">
+
                                 </div>
                                 <br>
                                 <div class="input-group">
@@ -139,6 +140,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <br>
                                 <a href=login.php>Already a user?</a>
                                 <br>
+                                <br>
+
+                                <label id="labelText" style="visibility: hidden; color:red"></label></span></td>
                                 <?php
 
                                 if ($showAlert) {
@@ -158,6 +162,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
             </div>
 
+
 </body>
+
+<script type="text/javascript">
+    function validateEmail(inputField) {
+
+        var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(inputField.value);
+        if (emailRegex) {
+            document.getElementById("email").style.border = "2px solid black";
+            document.getElementById("labelEmailText").style.visibility = "hidden";
+        } else {
+            document.getElementById("email").style.border = "3px solid red";
+            document.getElementById("email").focus();
+            $("#labelEmailText").html("Enter a valid email address");
+            document.getElementById("labelEmailText").style.visibility = "visible";
+        }
+    }
+
+    function validatePassword(event) {
+
+        var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
+        if (event.value.match(passw)) {
+            document.getElementById("password").style.border = "2px solid black";
+            document.getElementById("labelText").style.visibility = "hidden";
+        } else {
+            document.getElementById("password").style.border = "3px solid red";
+            document.getElementById("password").focus();
+            $("#labelText").html("Choose a strong password with minimum length of 8, must have a special (@#$%!&), lowercase (a-b), uppercase (A-B) characters and numbers (1-9).")
+            document.getElementById("labelText").style.visibility = "visible";
+        }
+    }
+</script>
+
 
 </html>

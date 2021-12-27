@@ -27,10 +27,9 @@ button[disabled] {
     opacity: .5;
 }
 
-.radio-button {
-    display: inline-block;
-    align-items: center;
-    margin: 0.5em;
+input[type=radio] {
+    width: 20px;
+    height: 20px;
 }
 
 .wrapper {
