@@ -14,7 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-
     $sql = "Select * from sign_up where username='$username' AND password='$password'";
     // $sql = "Select * from users where username='$username'";
     $result = mysqli_query($conn, $sql);

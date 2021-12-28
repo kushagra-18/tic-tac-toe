@@ -25,15 +25,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
 
-
 </head>
 
 <body>
 
 <?php
-
-
-
 
 ?>
 
@@ -53,6 +49,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
                         <th scope="col">Ranking</th>
                         <th scope="col">Full Name</th>
                         <th scope="col">Username</th>
+                        <th scope="col">Matches</th>
                         <th scope="col">Score</th>
                     </tr>
                 </thead>

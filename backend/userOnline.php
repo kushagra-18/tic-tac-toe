@@ -28,7 +28,7 @@ $currentTime = $currentTime->format('Y-m-d H:i:s');
 
 
 
-if ($currentTime > $time + 1000)
+if (strtotime($currentTime) > strtotime($time) + 1000)
 {
 //set online status to false
 $sql = "UPDATE leaderboard SET status = 'Offline' WHERE username = '" . $_SESSION['username'] . "'";

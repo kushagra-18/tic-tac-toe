@@ -29,7 +29,7 @@ if ($_POST['cell']) {
     }
 }
 
-if (playsCount() >= 9) {
+if ($turns >= 4) {
     echo "<script>alert('Draw!');</script>";
     //header("location: leaderboard.php");
 }
@@ -50,17 +50,37 @@ if (playsCount() >= 9) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    
-   
+
+
     <link rel="stylesheet" href="css/style.css">
 </head>
+
+<div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Reset Game!!!</h5>
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                This will reset the game and you will loose points. Are you sure?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary"><a href="backend/functions.php?reset=true">Reset</a></button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <body>
 
     <center>
         <font color="white">
             <h2>
-                
+
                 Tic-Tac-Toe
                 <?php
                 echo "<br>";
@@ -76,17 +96,27 @@ if (playsCount() >= 9) {
         <h4><?php echo currentPlayer() ?></h4>
         <!-- Tic Tac Toe main game layout starts -->
 
-
-        <?php $visitedArr = array(); ?>
+        <?php $visitedArrUser = array();
+        $visitedArrComp = array();
+        ?>
         <form method="post" action="welcome.php">
 
             <table class="tic-tac-toe" cellpadding="0" cellspacing="0">
                 <tbody>
                     <?php
 
-                    $lastRow = 0;
+                    // print value of each cell in session
                     for ($i = 1; $i <= 9; $i++) {
-                        $row = ceil($i /3);
+                        if (isset($_SESSION['CELL_' . $i])) {
+                            echo $i." ".$_SESSION['CELL_' . $i];
+                            echo " - ";
+                        }
+                    }
+
+                    $lastRow = 0;
+                    $turns = 0;
+                    for ($i = 1; $i <= 9; $i++) {
+                        $row = ceil($i / 3);
 
                         if ($row !== $lastRow) {
                             $lastRow = $row;
@@ -94,8 +124,6 @@ if (playsCount() >= 9) {
                             if ($i > 1) {
                                 echo "</tr>";
                             }
-
-                          
                         }
 
                         $additionalClass = '';
@@ -111,12 +139,17 @@ if (playsCount() >= 9) {
 
                         <td class="cell-<?= $i ?> <?= $additionalClass ?>">
                             <?php if (getCell($i) === 'x') : ?>
-                                <?php array_push($visitedArr, $i);?>
-                                <?php $randVal = playRandom(); ?>
+                                <?php array_push($visitedArrUser, $i); ?>
+                                
+                                <?php
+                                turnCount();
+                                $randVal = playRandom($visitedArrUser, $visitedArrComp);
+                                array_push($visitedArrComp, $randVal); ?>
+
                                 <center>
                                     <h2>X</h2>
-                                </center> 
-                            <?php elseif ($i == $randVal) : ?>                    
+                                </center>
+                            <?php elseif (getCell($i) === 'o') : ?>
                                 <center>
                                     <h2>O</h2>
                                 </center>
@@ -134,12 +167,15 @@ if (playsCount() >= 9) {
             </table>
 
             <button type="submit" disabled id="play-btn">Play</button>
-            <button class = "reset-btn" type="submit" onclick="resetPopup()">Reset</button>
+            <button type="button" class="reset-btn" data-toggle="modal" data-target="#resetModal">Reset</button>
 
         </form>
         <!-- Tic Tac Toe main game layout ends -->
 
-        <?php print_r($visitedArr); ?>
+        <?php echo "USER ";
+        print_r($visitedArrUser);
+        echo "   COMP ";
+        print_r($visitedArrComp); ?>
 
         <footer class="footer mt-auto py-3 bg-dark">
             <div class="container">
@@ -149,24 +185,21 @@ if (playsCount() >= 9) {
 
 </body>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 
-
-    function resetPopup() {
-        
-        confirm("This will reset the game and you will loose points. Are you sure?");
-
-    }
-
-    </script>
+        function resetPopup() {
     
+            var response = confirm("This will reset the game and you will loose points. Are you sure?");
+            if ((response==true)){
+                window.location.href = "backend/functions.php?reset=true";
+            }
+        }
+        </script> -->
+
 <script type="text/javascript">
     function enableButton() {
         document.getElementById('play-btn').disabled = false;
     }
 </script>
-
-
-
 
 </html>

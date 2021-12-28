@@ -1,15 +1,15 @@
 <?php
 
-error_reporting(E_ERROR | E_PARSE);
+include 'dbconnect.php';
 
-function registerPlayers($playerX = "", $playerO = "")
-{
-    $_SESSION['PLAYER_X_NAME'] = $playerX;
-    $_SESSION['PLAYER_O_NAME'] = $playerO;
-    setTurn('x');
-    resetBoard();
-    resetWins();
+if (isset($_GET['reset'])){
+     $resetBool = $_GET['reset'];
+    if($resetBool == 'true'){
+        resetBoard();
+        header("location: /PHP/tic-tac-toe/welcome.php");
+    }
 }
+error_reporting(E_ERROR | E_PARSE);
 
 $name = "'s [X]";
 
@@ -25,12 +25,6 @@ function resetBoard()
     }
 }
 
-function resetWins()
-{
-    $_SESSION['PLAYER_X_WINS'] = 0;
-    $_SESSION['PLAYER_O_WINS'] = 0;
-}
-
 function playsCount()
 {
     return $_SESSION['PLAYS'] ? $_SESSION['PLAYS'] : 0;
@@ -43,6 +37,22 @@ function addPlaysCount()
     }
 
     $_SESSION['PLAYS']++;
+
+    echo $_SESSION['PLAYS'];
+
+}
+
+$turns = 0;
+
+function turnCount(){
+
+//check if cell session is filled till 9
+    if(playsCount() == 4){
+
+        echo "<script>alert('Draw!')</script>";
+        resetBoard();
+
+    }
 }
 
 function resetPlaysCount()
@@ -50,15 +60,9 @@ function resetPlaysCount()
     $_SESSION['PLAYS'] = 0;
 }
 
-
 function playerName($player = 'x')
 {
     return $_SESSION['PLAYER_' . strtoupper($player) . '_NAME'];
-}
-
-function playersRegistered()
-{
-    return $_SESSION['PLAYER_X_NAME'] && $_SESSION['PLAYER_O_NAME'];
 }
 
 function setTurn($turn = 'x')
@@ -69,23 +73,6 @@ function setTurn($turn = 'x')
 function getTurn()
 {
     return $_SESSION['TURN'] ? $_SESSION['TURN'] : 'x';
-}
-
-function markWin($player = 'x')
-{
-    $_SESSION['PLAYER_' . strtoupper($player) . '_WINS']++;
-}
-
-function switchTurn()
-{
-    switch (getTurn()) {
-        case 'x':
-            setTurn('o');
-            break;
-        default:
-            setTurn('x');
-            break;
-    }
 }
 
 function currentPlayer()
@@ -105,27 +92,42 @@ function play($cell = '')
     $win = playerPlayWin($cell);
 
     if (!$win) {
-        switchTurn();
+        //switchTurn();
     } else {
-        markWin(getTurn());
         resetBoard();
     }
 
     return $win;
 }
 
-function playRandom($cell = '')
+function playRandom($visitedArrUser,$visitedArrComp)
 {
 
-    $random = rand(1, 9);
+    $visitedArr = array_merge($visitedArrUser, $visitedArrComp);
 
+   // print_r($visitedArr);
+
+    $random = -1;
+
+    //creating random numbers from 0 to 9 excluding the visited cells
+
+    do {   
+
+        $random = rand(1,9);
+        
+    } while(in_array($random, $visitedArr));
+
+    echo " Random". $random;
+
+    $_SESSION['CELL_' . $random] = 'o';
+    
     return $random;
 }
+
 
 function getCell($cell = '')
 {
 
-  //  echo "<script>alert('" . $_SESSION['CELL_' . $cell] . "');</script>";
     return $_SESSION['CELL_' . $cell];
 }
 
@@ -143,8 +145,6 @@ function playerPlayWin($cell = 1)
     $row = ceil($cell / 3);
 
     $player = getTurn();
-
-    
 
     return isVerticalWin($column, $player) || isHorizontalWin($row, $player) || isDiagonalWin($player);
 }
@@ -176,8 +176,4 @@ function isDiagonalWin($turn = 'x')
     return $win && getCell(5) == $turn;
 }
 
-function score($player = 'x')
-{
-    $score = $_SESSION['PLAYER_' . strtoupper($player) . '_WINS'];
-    return $score ? $score : 0;
-}
+
