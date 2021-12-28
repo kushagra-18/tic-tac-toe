@@ -117,13 +117,9 @@ function play($cell = '')
 function playRandom($cell = '')
 {
 
-    echo '<td class="cell-4 horizontal-border">';
-    echo '<center>';
-    echo '<h2>0</h2>';
-    echo ' </center>';                                                    
-    echo ' </td>';
-
     $random = rand(1, 9);
+
+    return $random;
 }
 
 function getCell($cell = '')

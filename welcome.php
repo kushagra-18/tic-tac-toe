@@ -76,6 +76,8 @@ if (playsCount() >= 9) {
         <h4><?php echo currentPlayer() ?></h4>
         <!-- Tic Tac Toe main game layout starts -->
 
+
+        <?php $visitedArr = array(); ?>
         <form method="post" action="welcome.php">
 
             <table class="tic-tac-toe" cellpadding="0" cellspacing="0">
@@ -93,7 +95,7 @@ if (playsCount() >= 9) {
                                 echo "</tr>";
                             }
 
-                            // echo "<tr class='row-{$row}'>";
+                          
                         }
 
                         $additionalClass = '';
@@ -109,10 +111,12 @@ if (playsCount() >= 9) {
 
                         <td class="cell-<?= $i ?> <?= $additionalClass ?>">
                             <?php if (getCell($i) === 'x') : ?>
+                                <?php array_push($visitedArr, $i);?>
+                                <?php $randVal = playRandom(); ?>
                                 <center>
                                     <h2>X</h2>
-                                </center> <?php playRandom($i) ?>
-                            <?php elseif (getCell($i) === 'o') : ?>                    
+                                </center> 
+                            <?php elseif ($i == $randVal) : ?>                    
                                 <center>
                                     <h2>O</h2>
                                 </center>
@@ -134,6 +138,8 @@ if (playsCount() >= 9) {
 
         </form>
         <!-- Tic Tac Toe main game layout ends -->
+
+        <?php print_r($visitedArr); ?>
 
         <footer class="footer mt-auto py-3 bg-dark">
             <div class="container">
