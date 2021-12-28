@@ -116,7 +116,12 @@ function play($cell = '')
 
 function playRandom($cell = '')
 {
-    //choose a random number from 1 to 9
+
+    echo '<td class="cell-4 horizontal-border">';
+    echo '<center>';
+    echo '<h2>0</h2>';
+    echo ' </center>';                                                    
+    echo ' </td>';
 
     $random = rand(1, 9);
 }

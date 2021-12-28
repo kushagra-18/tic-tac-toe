@@ -50,10 +50,8 @@ if (playsCount() >= 9) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
-
+    
+   
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -62,7 +60,7 @@ if (playsCount() >= 9) {
     <center>
         <font color="white">
             <h2>
-                <br>
+                
                 Tic-Tac-Toe
                 <?php
                 echo "<br>";
@@ -82,15 +80,11 @@ if (playsCount() >= 9) {
 
             <table class="tic-tac-toe" cellpadding="0" cellspacing="0">
                 <tbody>
-
                     <?php
-
-    
-
 
                     $lastRow = 0;
                     for ($i = 1; $i <= 9; $i++) {
-                        $row = ceil($i / 3);
+                        $row = ceil($i /3);
 
                         if ($row !== $lastRow) {
                             $lastRow = $row;
@@ -99,7 +93,7 @@ if (playsCount() >= 9) {
                                 echo "</tr>";
                             }
 
-                            echo "<tr class='row-{$row}'>";
+                            // echo "<tr class='row-{$row}'>";
                         }
 
                         $additionalClass = '';
@@ -136,6 +130,7 @@ if (playsCount() >= 9) {
             </table>
 
             <button type="submit" disabled id="play-btn">Play</button>
+            <button class = "reset-btn" type="submit" onclick="resetPopup()">Reset</button>
 
         </form>
         <!-- Tic Tac Toe main game layout ends -->
@@ -148,6 +143,17 @@ if (playsCount() >= 9) {
 
 </body>
 
+<script type="text/javascript">
+
+
+    function resetPopup() {
+        
+        confirm("This will reset the game and you will loose points. Are you sure?");
+
+    }
+
+    </script>
+    
 <script type="text/javascript">
     function enableButton() {
         document.getElementById('play-btn').disabled = false;

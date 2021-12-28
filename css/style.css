@@ -14,7 +14,7 @@ body, input, button {
 }
 
 button {
-    background-color: #ff3111;
+    background-color: green;
     color: #FFF;
     border: 0;
     border-radius: 10px;
@@ -68,13 +68,12 @@ input[type=radio] {
     border-color: #eee;
 }
 
-.welcome .player-name {
-    margin: 30px 0;
-}
-
 .reset-btn {
     display: inline-block;
-    font-size: 8pt;
-    color: red;
-    margin-top: 30px;
+    background-color: red;
+    color: #FFF;
+    border: 0;
+    border-radius: 10px;
+    padding: 1em 2em;
+    cursor: pointer;
 }
