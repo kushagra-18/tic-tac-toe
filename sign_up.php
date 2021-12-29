@@ -51,8 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $sql = "INSERT INTO sign_up (name, email, password,username) VALUES ('$name', '$email', '$pass','$username')";
             $result = mysqli_query($conn, $sql);
 
-            $sqlLeaderboard = "INSERT INTO leaderboard (username,score,status) VALUES ('$username',0,'Online')";
+            $sqlLeaderboard = "INSERT INTO leaderboard (username,score) VALUES ('$username',0)";
             $resultLeaderboard = mysqli_query($conn, $sqlLeaderboard);
+
+            if(!$resultLeaderboard){
+                //sql error
+                echo "Error: " . $sqlLeaderboard . "<br>" . mysqli_error($conn);
+            }
 
             if ($result) {
                 $showAlert = true;

@@ -8,6 +8,7 @@ if (isset($_GET['reset'])){
         header("location: /PHP/tic-tac-toe/welcome.php");
     }
 }
+
 error_reporting(E_ERROR | E_PARSE);
 
 $name = "'s [X]";
@@ -46,7 +47,7 @@ $turns = 0;
 
 function turnCount(){
 
-//check if cell session is filled till 9
+//check if cell session is filled till 5
     if(playsCount() == 5){
 
         echo "<script>alert('Draw!')</script>";
@@ -98,7 +99,7 @@ function play($cell = '')
 function playRandom($visitedArrUser,$visitedArrComp)
 {
 
-    echo "TESTING FOR TIMES";
+   // echo "TESTING FOR TIMES";
 
     $random = -1;
     

@@ -28,8 +28,10 @@ button[disabled] {
 }
 
 input[type=radio] {
-    width: 20px;
-    height: 20px;
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    opacity: 0;
 }
 
 .wrapper {

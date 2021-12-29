@@ -27,7 +27,7 @@ if ($_POST['cell']) {
         //update match count in database
         $sql = "UPDATE leaderboard SET matches = matches + 1,wins = wins + 1 WHERE  username = '" . $_SESSION['username'] . "'";
         $result = mysqli_query($conn, $sql);
-        
+
         if (!$result) {
             echo "<script>alert('Error updating score');</script>";
         }
@@ -59,7 +59,7 @@ if ($turns >= 5) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    
+
 
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -107,9 +107,9 @@ if ($turns >= 5) {
 
         <?php $visitedArrUser = array();
         $visitedArrComp = array();
-    
+
         ?>
-        <form method="post" action="welcome.php">
+        <form method="post" id = "gameForm" action="welcome.php">
 
             <table class="tic-tac-toe" cellpadding="0" cellspacing="0">
                 <tbody>
@@ -117,7 +117,7 @@ if ($turns >= 5) {
                     // print value of each cell in session
                     for ($i = 1; $i <= 9; $i++) {
                         if (isset($_SESSION['CELL_' . $i])) {
-                            echo $i." ".$_SESSION['CELL_' . $i];
+                            echo $i . " " . $_SESSION['CELL_' . $i];
                             echo " - ";
                         }
                     }
@@ -148,27 +148,27 @@ if ($turns >= 5) {
 
                         <td class="cell-<?= $i ?> <?= $additionalClass ?>">
                             <?php if (getCell($i) === 'x') : ?>
-                                
-                                
+
+
                                 <?php
                                 turnCount();
                                 array_push($visitedArrUser, $i);
                                 $randVal = playRandom($visitedArrUser, $visitedArrComp);
-                                array_push($visitedArrComp, $randVal); 
+                                array_push($visitedArrComp, $randVal);
                                 $_SESSION['CELL_' . $randVal] = 'o';
 
                                 ?>
-                               
+
                                 <center>
-                                    <h2>X</h2>
+                                    <img src="images/cross.png" alt="cross" width="75" height="75">
                                 </center>
                             <?php elseif (getCell($i) === 'o') : ?>
                                 <center>
-                                    <h2>O</h2>
+                                <img src="images/zero.png" alt="cross" width="75" height="75">
                                 </center>
                             <?php else : ?>
                                 <center>
-                                    <input type="radio" name="cell" value="<?= $i ?>" onclick="enableButton()" />
+                                    <input type="radio" name="cell" value="<?= $i ?>" onchange="formSubmit(this)" />
                                 </center>
                             <?php endif; ?>
                         </td>
@@ -179,11 +179,20 @@ if ($turns >= 5) {
                 </tbody>
             </table>
 
-            <button type="submit" disabled id="play-btn">Play</button>
+            <!-- <button type="submit" disabled id="play-btn">Play</button> -->
             <button type="button" class="reset-btn" data-toggle="modal" data-target="#resetModal">Reset</button>
 
         </form>
         <!-- Tic Tac Toe main game layout ends -->
+
+        <script>
+            function formSubmit(radioObj) {
+                if (radioObj.checked) {
+                    document.getElementById("gameForm").submit();
+
+                }
+            }
+        </script>
 
         <?php echo "USER ";
         print_r($visitedArrUser);
