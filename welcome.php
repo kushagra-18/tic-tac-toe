@@ -23,19 +23,28 @@ if ($_POST['cell']) {
         //update leaderboard score in database
         $sql = "UPDATE leaderboard SET score = score + 10 WHERE username = '" . $_SESSION['username'] . "'";
         $result = mysqli_query($conn, $sql);
+
+        //update match count in database
+        $sql = "UPDATE leaderboard SET matches = matches + 1,wins = wins + 1 WHERE  username = '" . $_SESSION['username'] . "'";
+        $result = mysqli_query($conn, $sql);
+        
         if (!$result) {
             echo "<script>alert('Error updating score');</script>";
         }
     }
 }
 
-if ($turns >= 4) {
+if ($turns >= 5) {
+
+    $sql = "UPDATE leaderboard SET matches = matches + 1 WHERE username = '" . $_SESSION['username'] . "'";
+    $result = mysqli_query($conn, $sql);
+
     echo "<script>alert('Draw!');</script>";
     //header("location: leaderboard.php");
 }
 ?>
 
-<!-- PHP CODE FOR GAME LOGIC -->
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +59,7 @@ if ($turns >= 4) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
+    
 
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -98,13 +107,13 @@ if ($turns >= 4) {
 
         <?php $visitedArrUser = array();
         $visitedArrComp = array();
+    
         ?>
         <form method="post" action="welcome.php">
 
             <table class="tic-tac-toe" cellpadding="0" cellspacing="0">
                 <tbody>
                     <?php
-
                     // print value of each cell in session
                     for ($i = 1; $i <= 9; $i++) {
                         if (isset($_SESSION['CELL_' . $i])) {
@@ -139,13 +148,17 @@ if ($turns >= 4) {
 
                         <td class="cell-<?= $i ?> <?= $additionalClass ?>">
                             <?php if (getCell($i) === 'x') : ?>
-                                <?php array_push($visitedArrUser, $i); ?>
+                                
                                 
                                 <?php
                                 turnCount();
+                                array_push($visitedArrUser, $i);
                                 $randVal = playRandom($visitedArrUser, $visitedArrComp);
-                                array_push($visitedArrComp, $randVal); ?>
+                                array_push($visitedArrComp, $randVal); 
+                                $_SESSION['CELL_' . $randVal] = 'o';
 
+                                ?>
+                               
                                 <center>
                                     <h2>X</h2>
                                 </center>
@@ -184,17 +197,6 @@ if ($turns >= 4) {
         </footer>
 
 </body>
-
-<!-- <script type="text/javascript">
-
-        function resetPopup() {
-    
-            var response = confirm("This will reset the game and you will loose points. Are you sure?");
-            if ((response==true)){
-                window.location.href = "backend/functions.php?reset=true";
-            }
-        }
-        </script> -->
 
 <script type="text/javascript">
     function enableButton() {

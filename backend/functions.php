@@ -1,5 +1,4 @@
 <?php
-
 include 'dbconnect.php';
 
 if (isset($_GET['reset'])){
@@ -42,12 +41,13 @@ function addPlaysCount()
 
 }
 
+
 $turns = 0;
 
 function turnCount(){
 
 //check if cell session is filled till 9
-    if(playsCount() == 4){
+    if(playsCount() == 5){
 
         echo "<script>alert('Draw!')</script>";
         resetBoard();
@@ -63,11 +63,6 @@ function resetPlaysCount()
 function playerName($player = 'x')
 {
     return $_SESSION['PLAYER_' . strtoupper($player) . '_NAME'];
-}
-
-function setTurn($turn = 'x')
-{
-    $_SESSION['TURN'] = $turn;
 }
 
 function getTurn()
@@ -92,7 +87,7 @@ function play($cell = '')
     $win = playerPlayWin($cell);
 
     if (!$win) {
-        //switchTurn();
+        // do nothing
     } else {
         resetBoard();
     }
@@ -103,11 +98,13 @@ function play($cell = '')
 function playRandom($visitedArrUser,$visitedArrComp)
 {
 
+    echo "TESTING FOR TIMES";
+
+    $random = -1;
+    
     $visitedArr = array_merge($visitedArrUser, $visitedArrComp);
 
    // print_r($visitedArr);
-
-    $random = -1;
 
     //creating random numbers from 0 to 9 excluding the visited cells
 
@@ -117,13 +114,10 @@ function playRandom($visitedArrUser,$visitedArrComp)
         
     } while(in_array($random, $visitedArr));
 
-    echo " Random". $random;
-
-    $_SESSION['CELL_' . $random] = 'o';
+    // $_SESSION['CELL_' . $random] = 'o';
     
     return $random;
 }
-
 
 function getCell($cell = '')
 {

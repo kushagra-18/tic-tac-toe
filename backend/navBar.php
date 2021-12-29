@@ -2,14 +2,16 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<style>
 
-body {
-        background-image: url("images/background.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-        text-align: center;
-    }
+<link rel="icon" href="images/favicon.png" type="image/x-icon">
+
+<style>
+  body {
+    background-image: url("images/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-align: center;
+  }
 </style>
 
 
@@ -25,7 +27,7 @@ body {
         <a class="nav-link" href="welcome.php">Home</a>
       </li>
       <li class="nav-item">
-        <a class ="nav-link"  href="leaderboard.php">Leaderboard</a>
+        <a class="nav-link" href="leaderboard.php">Leaderboard</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -33,12 +35,12 @@ body {
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" data-toggle="modal" data-target="#userProfile">Profile</a>
-          <a class="dropdown-item"  href="change.php">Change Password</a>
+          <a class="dropdown-item" href="change.php">Change Password</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="logout.php">Logout</a>
         </div>
       </li>
-      
+
     </ul>
   </div>
 </nav>
@@ -49,14 +51,23 @@ body {
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Profile | <?php echo $_SESSION['username']; ?></h5>
-          <span aria-hidden="true">&times;</span>
+        <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
+        <?php
+        $sql = "SELECT * FROM leaderboard INNER JOIN sign_up on leaderboard.username = sign_up.username WHERE leaderboard.username = '" . $_SESSION['username'] . "'";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $fullname = $row['name'];
+        $email = $row['email'];
 
-        
-
-
+        echo "<h6>Full Name: " . $fullname . "</h6>";
+        echo "<h6>Email: " . $email . "</h6>";
+        echo "<h6>Total Matches: " . $row['matches'] . "</h6>";
+        echo "<h6>Total Wins: " . $row['wins'] . "</h6>";
+  
+        ?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -68,9 +79,7 @@ body {
 
 
 <script>
-
-var userOnline = setInterval(function () {
+  var userOnline = setInterval(function() {
     $.get("backend/userOnline.php");
-}, 1000);
-
+  }, 1000);
 </script>

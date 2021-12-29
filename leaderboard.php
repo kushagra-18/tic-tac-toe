@@ -50,6 +50,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
                         <th scope="col">Full Name</th>
                         <th scope="col">Username</th>
                         <th scope="col">Matches</th>
+                        <th scope="col">Wins</th>
                         <th scope="col">Score</th>
                     </tr>
                 </thead>
