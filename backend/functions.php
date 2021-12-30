@@ -9,7 +9,7 @@ if (isset($_GET['reset'])){
     }
 }
 
-error_reporting(E_ERROR | E_PARSE);
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 $name = "'s [X]";
 
@@ -30,6 +30,7 @@ function playsCount()
     return $_SESSION['PLAYS'] ? $_SESSION['PLAYS'] : 0;
 }
 
+
 function addPlaysCount()
 {
     if (!$_SESSION['PLAYS']) {
@@ -38,17 +39,16 @@ function addPlaysCount()
 
     $_SESSION['PLAYS']++;
 
-    echo $_SESSION['PLAYS'];
+    //echo $_SESSION['PLAYS'];
 
 }
-
 
 $turns = 0;
 
 function turnCount(){
 
 //check if cell session is filled till 5
-    if(playsCount() == 5){
+    if(playsCount() >= 5){
 
         echo "<script>alert('Draw!')</script>";
         resetBoard();
@@ -96,16 +96,14 @@ function play($cell = '')
     return $win;
 }
 
-function playRandom($visitedArrUser,$visitedArrComp)
+function playRandom()
 {
 
-   // echo "TESTING FOR TIMES";
+  // echo "<script>alert('TESTING FOR TIMES')</script>";
 
     $random = -1;
     
-    $visitedArr = array_merge($visitedArrUser, $visitedArrComp);
-
-   // print_r($visitedArr);
+    $visitedArr = array_merge($_SESSION['visitedArrUser'],$_SESSION['visitedArrComp']);
 
     //creating random numbers from 0 to 9 excluding the visited cells
 
@@ -114,8 +112,6 @@ function playRandom($visitedArrUser,$visitedArrComp)
         $random = rand(1,9);
         
     } while(in_array($random, $visitedArr));
-
-    // $_SESSION['CELL_' . $random] = 'o';
     
     return $random;
 }
@@ -170,5 +166,3 @@ function isDiagonalWin($turn = 'x')
 
     return $win && getCell(5) == $turn;
 }
-
-

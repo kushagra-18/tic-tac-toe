@@ -114,7 +114,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <input id="password" type="password" class="form-control" name="password" required placeholder="New Password">
                             </div>
                             <br>
-                            <button type="submit" class="btn btn-primary">Change Password</button>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input id="confirmPassword" type="password" class="form-control" name="confirmPassword" required placeholder="Confirm New Password">
+                            </div>
+
+
+                            <br>
+                            <button type="submit" class="btn btn-primary" onclick="validatePassword()">Change Password</button>
                         </form>
                     </div>
                 </div>
@@ -122,5 +129,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
 
 </body>
+
+<!-- check confirm password -->
+<script>
+    function validatePassword() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (password != confirmPassword) {
+            document.getElementById("confirmPassword").setCustomValidity("Passwords Don't Match");
+        } else {
+            document.getElementById("confirmPassword").setCustomValidity('');
+        }
+    }
+
+    document.getElementById("confirmPassword").onchange = validatePassword;
+    document.getElementById("password").onkeyup = validatePassword;
+
+    function validatePassword(event) {
+
+        var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
+        if (event.value.match(passw)) {
+            document.getElementById("password").style.border = "2px solid black";
+            document.getElementById("labelText").style.display = "none";
+        } else {
+            document.getElementById("password").style.border = "3px solid red";
+            document.getElementById("password").focus();
+            $("#labelText").html("Choose a strong password with minimum length of 8, must have a special (@#$%!&), lowercase (a-b), uppercase (A-B) characters and numbers (0-9).")
+            document.getElementById("labelText").style.visibility = "visible";
+        }
+    }
+</script>
 
 </html>

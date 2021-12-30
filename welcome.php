@@ -38,7 +38,7 @@ if ($turns >= 5) {
 
     $sql = "UPDATE leaderboard SET matches = matches + 1 WHERE username = '" . $_SESSION['username'] . "'";
     $result = mysqli_query($conn, $sql);
-
+    resetBoard();
     echo "<script>alert('Draw!');</script>";
     //header("location: leaderboard.php");
 }
@@ -105,26 +105,36 @@ if ($turns >= 5) {
         <h4><?php echo currentPlayer() ?></h4>
         <!-- Tic Tac Toe main game layout starts -->
 
-        <?php $visitedArrUser = array();
-        $visitedArrComp = array();
+        <?php $_SESSION['visitedArrUser'] = array();
+        $_SESSION['visitedArrComp'] = array();
+        $_SESSION['visited'] = array();
 
+   
         ?>
-        <form method="post" id = "gameForm" action="welcome.php">
+
+
+
+        <form method="post" id="gameForm" action="welcome.php">
 
             <table class="tic-tac-toe" cellpadding="0" cellspacing="0">
                 <tbody>
                     <?php
                     // print value of each cell in session
-                    for ($i = 1; $i <= 9; $i++) {
-                        if (isset($_SESSION['CELL_' . $i])) {
-                            echo $i . " " . $_SESSION['CELL_' . $i];
-                            echo " - ";
-                        }
-                    }
+                    // for ($i = 1; $i <= 9; $i++) {
+                    //     if (isset($_SESSION['CELL_' . $i])) {
+                    //         echo $i . " " . $_SESSION['CELL_' . $i];
+                    //         echo " - ";
+                    //     }
+                    // }
 
                     $lastRow = 0;
                     $turns = 0;
+
+                    $_SESSION['flag'] = 0;
+                    $_SESSION['flag2'] = 0;
+
                     for ($i = 1; $i <= 9; $i++) {
+
                         $row = ceil($i / 3);
 
                         if ($row !== $lastRow) {
@@ -149,13 +159,20 @@ if ($turns >= 5) {
                         <td class="cell-<?= $i ?> <?= $additionalClass ?>">
                             <?php if (getCell($i) === 'x') : ?>
 
-
                                 <?php
+                            
+                                $_SESSION['flag'] = 1;
                                 turnCount();
-                                array_push($visitedArrUser, $i);
-                                $randVal = playRandom($visitedArrUser, $visitedArrComp);
-                                array_push($visitedArrComp, $randVal);
+                                array_push($_SESSION['visitedArrUser'], $i);
+                                if($_SESSION['flag'] == 1 && $_SESSION['flag2'] == 0){
+                                    $_SESSION['flag2'] = 1;
+
+                                $randVal = playRandom();
+                                array_push($_SESSION['visitedArrComp'],$randVal);
+
                                 $_SESSION['CELL_' . $randVal] = 'o';
+                                
+                                }
 
                                 ?>
 
@@ -164,7 +181,7 @@ if ($turns >= 5) {
                                 </center>
                             <?php elseif (getCell($i) === 'o') : ?>
                                 <center>
-                                <img src="images/zero.png" alt="cross" width="75" height="75">
+                                    <img src="images/zero.png" alt="cross" width="75" height="75">
                                 </center>
                             <?php else : ?>
                                 <center>
@@ -174,7 +191,6 @@ if ($turns >= 5) {
                         </td>
 
                     <?php } ?>
-
                     </tr>
                 </tbody>
             </table>
@@ -195,9 +211,9 @@ if ($turns >= 5) {
         </script>
 
         <?php echo "USER ";
-        print_r($visitedArrUser);
+        print_r($_SESSION['visitedArrUser']);
         echo "   COMP ";
-        print_r($visitedArrComp); ?>
+        print_r($_SESSION['visitedArrComp']); ?>
 
         <footer class="footer mt-auto py-3 bg-dark">
             <div class="container">

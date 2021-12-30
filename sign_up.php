@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <br>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                    <input data-toggle="tooltip" data-placement="top" title="Choose a strong password with minimum length of 8, must have a special (@#$%!&), lowercase (a-b), uppercase (A-B) characters and numbers (1-9)." id="password" type="password" class="form-control" name="password" onchange="validatePassword(this)" required placeholder="Password">
+                                    <input data-toggle="tooltip" data-placement="top" title="Choose a strong password with minimum length of 8, must have a special (@#$%!&), lowercase (a-b), uppercase (A-B) characters and numbers (0-9)." id="password" type="password" class="form-control" name="password" onchange="validatePassword(this)" required placeholder="Password">
 
                                 </div>
                                 <br>
@@ -173,10 +173,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <script type="text/javascript">
     function validateEmail(inputField) {
 
-        var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(inputField.value);
+        var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,8})?$/.test(inputField.value);
         if (emailRegex) {
             document.getElementById("email").style.border = "2px solid black";
-            document.getElementById("labelEmailText").style.visibility = "hidden";
+            document.getElementById("labelEmailText").style.display = "none";
         } else {
             document.getElementById("email").style.border = "3px solid red";
             document.getElementById("email").focus();
@@ -185,16 +185,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
+
     function validatePassword(event) {
 
         var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
         if (event.value.match(passw)) {
             document.getElementById("password").style.border = "2px solid black";
-            document.getElementById("labelText").style.visibility = "hidden";
+            document.getElementById("labelText").style.display = "none";
         } else {
             document.getElementById("password").style.border = "3px solid red";
             document.getElementById("password").focus();
-            $("#labelText").html("Choose a strong password with minimum length of 8, must have a special (@#$%!&), lowercase (a-b), uppercase (A-B) characters and numbers (1-9).")
+            $("#labelText").html("Choose a strong password with minimum length of 8, must have a special (@#$%!&), lowercase (a-b), uppercase (A-B) characters and numbers (0-9).")
             document.getElementById("labelText").style.visibility = "visible";
         }
     }
