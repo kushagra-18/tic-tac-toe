@@ -86,15 +86,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <style>
         body {
             background-image: url("images/background.jpg");
-            background-repeat: no-repeat;
+            background-repeat: repeat;
             background-size: cover;
+
         }
 
         .container {
             position: absolute;
             top: 50%;
             left: 50%;
+            -ms-transform: translate(-20%, -10%);
             transform: translate(-50%, -50%);
+            -webkit-animation: fadein 1s, expand 0.5s;
+             /* -webkit-animation: expand 0.5s; */
+        }
+
+        @-webkit-keyframes fadein {
+
+            /* Safari and Chrome */
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes identifier {
+
+            0% {
+                transform: scale(0);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+
+        }
+
+        @-webkit-keyframes expand {
+            0% {
+                height: 0px
+            }
+
+            100% {
+                height: 435px;
+            }
         }
     </style>
 </head>

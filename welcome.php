@@ -185,9 +185,9 @@ if ($turns >= 5000) {
 
                                     $_SESSION['flag2'] = 1;
 
-                                  //  print_r($_SESSION);
+                                    // print_r($_SESSION);
 
-                                  //  die;
+                                    // die;
 
                                     $randVal = playRandom();
 
@@ -201,15 +201,15 @@ if ($turns >= 5000) {
                                 <center>
                                     <img src="images/cross.png" alt="cross" width="75" height="75">
                                 </center>
-                            <?php } elseif (getCell($i) === 'o'){ ?>
+                            <?php } elseif (getCell($i) === 'o') { ?>
                                 <center>
                                     <img src="images/zero.png" alt="zero" width="75" height="75">
                                 </center>
-                            <?php }else  ?>
+                            <?php }else { ?>
                                 <center>
                                     <input type="radio" name="cell" value="<?= $i ?>" onchange="formSubmit(this)" />
                                 </center>
-                           
+                            <?php } ?>
                         </td>
 
                     <?php } ?>
