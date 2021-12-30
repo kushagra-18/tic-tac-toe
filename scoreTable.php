@@ -36,13 +36,14 @@ while ($row = mysqli_fetch_array($result)) {
     }
 
     //  echo $result;
-    echo "<td> " . $userStatus. "</td>";
+    
     echo "<td> " . ++$count . "</td>";
     echo "<td> " . $row['name'] . "</td>";
     echo "<td> " . $row['username'] . "</td>";
     echo "<td> " . $row['matches'] . "</td>";
     echo "<td> " . $row['wins'] . "</td>";
     echo "<td> " . $row['score'] . "</td>";
+    echo "<td> " . $userStatus. "</td>";
     echo " </tr>";
 };
 

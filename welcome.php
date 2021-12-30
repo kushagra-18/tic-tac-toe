@@ -31,10 +31,29 @@ if ($_POST['cell']) {
         if (!$result) {
             echo "<script>alert('Error updating score');</script>";
         }
+    } else if ($win === 'comp') {
+
+        echo "<script>alert('You lose!');</script>";
+
+        //update leaderboard score in database
+        $sql = "UPDATE leaderboard SET score = score - 10 WHERE username = '" . $_SESSION['username'] . "'";
+        $result = mysqli_query($conn, $sql);
+
+        //update match count in database
+        $sql = "UPDATE leaderboard SET matches = matches + 1 WHERE  username = '" . $_SESSION['username'] . "'";
+        $result = mysqli_query($conn, $sql);
+
+        if (!$result) {
+            echo "<script>alert('Error updating score');</script>";
+        }
     }
 }
 
-if ($turns >= 5) {
+if ($turns >= 5000) {
+
+    //update leaderboard score in database
+    $sql = "UPDATE leaderboard SET score = score - 5 WHERE username = '" . $_SESSION['username'] . "'";
+    $result = mysqli_query($conn, $sql);
 
     $sql = "UPDATE leaderboard SET matches = matches + 1 WHERE username = '" . $_SESSION['username'] . "'";
     $result = mysqli_query($conn, $sql);
@@ -44,12 +63,11 @@ if ($turns >= 5) {
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
     <title>Tic Tac Toe |
         <?php
         echo $_SESSION['username'];
@@ -76,6 +94,7 @@ if ($turns >= 5) {
             <div class="modal-body">
                 This will reset the game and you will loose points. Are you sure?
             </div>
+            
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary"><a href="backend/functions.php?reset=true">Reset</a></button>
@@ -109,10 +128,8 @@ if ($turns >= 5) {
         $_SESSION['visitedArrComp'] = array();
         $_SESSION['visited'] = array();
 
-   
+
         ?>
-
-
 
         <form method="post" id="gameForm" action="welcome.php">
 
@@ -157,21 +174,26 @@ if ($turns >= 5) {
                     ?>
 
                         <td class="cell-<?= $i ?> <?= $additionalClass ?>">
-                            <?php if (getCell($i) === 'x') : ?>
+                            <?php if (getCell($i) === 'x') {?>
 
                                 <?php
-                            
+
                                 $_SESSION['flag'] = 1;
-                                turnCount();
                                 array_push($_SESSION['visitedArrUser'], $i);
-                                if($_SESSION['flag'] == 1 && $_SESSION['flag2'] == 0){
+
+                                if ($_SESSION['flag'] == 1 && $_SESSION['flag2'] == 0) {
+
                                     $_SESSION['flag2'] = 1;
 
-                                $randVal = playRandom();
-                                array_push($_SESSION['visitedArrComp'],$randVal);
+                                  //  print_r($_SESSION);
 
-                                $_SESSION['CELL_' . $randVal] = 'o';
-                                
+                                  //  die;
+
+                                    $randVal = playRandom();
+
+                                    array_push($_SESSION['visitedArrComp'], $randVal);
+
+                                    $_SESSION['CELL_' . $randVal] = 'o';
                                 }
 
                                 ?>
@@ -179,15 +201,15 @@ if ($turns >= 5) {
                                 <center>
                                     <img src="images/cross.png" alt="cross" width="75" height="75">
                                 </center>
-                            <?php elseif (getCell($i) === 'o') : ?>
+                            <?php } elseif (getCell($i) === 'o'){ ?>
                                 <center>
-                                    <img src="images/zero.png" alt="cross" width="75" height="75">
+                                    <img src="images/zero.png" alt="zero" width="75" height="75">
                                 </center>
-                            <?php else : ?>
+                            <?php }else  ?>
                                 <center>
                                     <input type="radio" name="cell" value="<?= $i ?>" onchange="formSubmit(this)" />
                                 </center>
-                            <?php endif; ?>
+                           
                         </td>
 
                     <?php } ?>

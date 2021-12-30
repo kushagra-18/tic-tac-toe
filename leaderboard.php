@@ -45,13 +45,14 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
             <table class="table table-striped table-dark">
                 <thead>
                     <tr>
-                        <th scope="col">Status</th>
+                        
                         <th scope="col">Ranking</th>
                         <th scope="col">Full Name</th>
                         <th scope="col">Username</th>
                         <th scope="col">Matches</th>
                         <th scope="col">Wins</th>
                         <th scope="col">Score</th>
+                        <th scope="col">Status</th>
                     </tr>
                 </thead>
                 <tbody id="responds">

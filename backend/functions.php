@@ -5,7 +5,8 @@ if (isset($_GET['reset'])){
      $resetBool = $_GET['reset'];
     if($resetBool == 'true'){
         resetBoard();
-        header("location: /PHP/tic-tac-toe/welcome.php");
+        echo "<script>alert('Rddddddddddddeset');</script>";
+        header("location: /PHP/tic-tac-toe/logout.php");
     }
 }
 
@@ -40,7 +41,6 @@ function addPlaysCount()
     $_SESSION['PLAYS']++;
 
     //echo $_SESSION['PLAYS'];
-
 }
 
 $turns = 0;
@@ -87,19 +87,35 @@ function play($cell = '')
     addPlaysCount();
     $win = playerPlayWin($cell);
 
+    $winComp = compPlayWin($cell);
+
+    if($winComp){
+
+        $winComp = 'comp';
+
+    }
+
     if (!$win) {
         // do nothing
     } else {
         resetBoard();
     }
 
-    return $win;
+
+    if (!$winComp) {
+        // do nothing
+    } else {
+        resetBoard();
+    }
+
+    return $win ? $win : $winComp;
 }
+
 
 function playRandom()
 {
 
-  // echo "<script>alert('TESTING FOR TIMES')</script>";
+  echo "<script>alert('TESTING FOR TIMES')</script>";
 
     $random = -1;
     
@@ -122,6 +138,8 @@ function getCell($cell = '')
     return $_SESSION['CELL_' . $cell];
 }
 
+
+
 function playerPlayWin($cell = 1)
 {
     if (playsCount() < 3) {
@@ -137,7 +155,30 @@ function playerPlayWin($cell = 1)
 
     $player = getTurn();
 
+   // echo $player;
+
     return isVerticalWin($column, $player) || isHorizontalWin($row, $player) || isDiagonalWin($player);
+}
+
+
+function compPlayWin($cell = 1){
+
+
+    if(playsCount() < 3){
+        return false;
+    }
+
+    $column = $cell % 3;
+    if(!$column){
+        $column = 3;
+    }
+
+    $row = ceil($cell / 3);
+
+    //echo "<script>alert('TESTING FOR COMP')</script>";
+
+    return isVerticalWinComp($column,$turn = 'o') || isHorizontalWinComp($row, $turn = 'o') || isDiagonalWinComp($turn = 'o');
+
 }
 
 function isVerticalWin($column = 1, $turn = 'x')
@@ -155,6 +196,33 @@ function isHorizontalWin($row = 1, $turn = 'x')
 }
 
 function isDiagonalWin($turn = 'x')
+{
+    $win = getCell(1) == $turn &&
+        getCell(9) == $turn;
+
+    if (!$win) {
+        $win = getCell(3) == $turn &&
+            getCell(7) == $turn;
+    }
+
+    return $win && getCell(5) == $turn;
+}
+
+function isVerticalWinComp($column = 1, $turn = 'o')
+{
+    return getCell($column) == $turn &&
+        getCell($column + 3) == $turn &&
+        getCell($column + 6) == $turn;
+}
+
+function isHorizontalWinComp($row = 1, $turn = 'o')
+{
+    return getCell($row) == $turn &&
+        getCell($row + 1) == $turn &&
+        getCell($row + 2) == $turn;
+}
+
+function isDiagonalWinComp($turn = 'o')
 {
     $win = getCell(1) == $turn &&
         getCell(9) == $turn;
