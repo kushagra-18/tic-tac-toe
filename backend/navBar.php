@@ -46,36 +46,9 @@
 </nav>
 
 
-<div class="modal fade" id="userProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Profile | <?php echo $_SESSION['username']; ?></h5>
-        <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <?php
-        $sql = "SELECT * FROM leaderboard INNER JOIN sign_up on leaderboard.username = sign_up.username WHERE leaderboard.username = '" . $_SESSION['username'] . "'";
-        $result = mysqli_query($conn, $sql);
-        $row = mysqli_fetch_assoc($result);
-        $fullname = $row['name'];
-        $email = $row['email'];
-
-        echo "<h6>Full Name: " . $fullname . "</h6>";
-        echo "<h6>Email: " . $email . "</h6>";
-        echo "<h6>Total Matches: " . $row['matches'] . "</h6>";
-        echo "<h6>Total Wins: " . $row['wins'] . "</h6>";
-  
-        ?>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+<?php 
+include_once 'userProfile.php';
+?>
 
 
 <script>

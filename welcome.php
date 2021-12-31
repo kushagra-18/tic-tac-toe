@@ -146,6 +146,7 @@ if ($turns >= 5000) {
 
                     $lastRow = 0;
                     $turns = 0;
+                    $randVal = 0;
 
                     $_SESSION['flag'] = 0;
                     $_SESSION['flag2'] = 0;
@@ -211,7 +212,7 @@ if ($turns >= 5000) {
                                 </center>
                             <?php } ?>
                         </td>
-
+                                
                     <?php } ?>
                     </tr>
                 </tbody>
