@@ -10,44 +10,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     exit;
 }
 ?>
-<?php
-if ($_POST['cell']) {
-    $win = play($_POST['cell']);
-    if ($win) {
-        echo "<script>alert('You win!');</script>";
-        //update leaderboard score in database
-        $sql = "UPDATE leaderboard SET score = score + 10 WHERE username = '" . $_SESSION['username'] . "'";
-        $result = mysqli_query($conn, $sql);
-        //update match count in database
-        $sql = "UPDATE leaderboard SET matches = matches + 1,wins = wins + 1 WHERE  username = '" . $_SESSION['username'] . "'";
-        $result = mysqli_query($conn, $sql);
-        if (!$result) {
-            echo "<script>alert('Error updating score');</script>";
-        }
-    } else if ($win === 'comp') {
-        echo "<script>alert('You lose!');</script>";
-        //update leaderboard score in database
-        $sql = "UPDATE leaderboard SET score = score - 10 WHERE username = '" . $_SESSION['username'] . "'";
-        $result = mysqli_query($conn, $sql);
-        //update match count in database
-        $sql = "UPDATE leaderboard SET matches = matches + 1 WHERE  username = '" . $_SESSION['username'] . "'";
-        $result = mysqli_query($conn, $sql);
-        if (!$result) {
-            echo "<script>alert('Error updating score');</script>";
-        }
-    }
-}
-// if ($turns >= 5000) {
-//     //update leaderboard score in database
-//     $sql = "UPDATE leaderboard SET score = score - 5 WHERE username = '" . $_SESSION['username'] . "'";
-//     $result = mysqli_query($conn, $sql);
-//     $sql = "UPDATE leaderboard SET matches = matches + 1 WHERE username = '" . $_SESSION['username'] . "'";
-//     $result = mysqli_query($conn, $sql);
-//     resetBoard();
-//     echo "<script>alert('Draw!');</script>";
-//     //header("location: leaderboard.php");
-// }
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -97,12 +60,9 @@ if ($_POST['cell']) {
         </font>
         <hr>
         <h4><?php echo currentPlayer(); ?></h4>
+
         <!-- Tic Tac Toe main game layout starts -->
-        <?php
-        $_SESSION['visitedArrUser'] = array();
-        $_SESSION['visitedArrComp'] = array();
-        $_SESSION['visited']        = array();
-        ?>
+
         <center>
             <form method="post" id="gameForm" action="welcome.php" style="display: inline-block;">
                 <table class="tic-tac-toe" style="text-align: center">
@@ -144,12 +104,36 @@ if ($_POST['cell']) {
         </footer>
 </body>
 
+
+<!-- import jquery from cdn -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script type="text/javascript">
     let turn = "player";
 
     let selectedCells = new Map();
     let computerSelectedCells = new Map();
     let userSelectedCells = new Map();
+
+    /**@abstract
+     * @param {result} result - result of the game
+     * AJAX call to update the leaderboard 
+     */
+
+
+    function pointsUpdate(result) {
+        $.ajax({
+            url: 'backend/updateMatchScore.php?result=' + result,'type': 'GET',
+            complete: function(response) {
+                console.log(response.responseText);
+            },
+            error: function() {
+                console.log(response.responseText);
+            }
+        });
+        return false;
+    }
 
     /**@abstract
      * @param {Maps} selectedCells
@@ -191,6 +175,8 @@ if ($_POST['cell']) {
             return true;
         } else if (selectedCells.has(2) && selectedCells.has(5) && selectedCells.has(8)) {
             return true;
+        } else if (selectedCells.has(3) && selectedCells.has(5) && selectedCells.has(7)) {
+            return true;
         }
 
         return false;
@@ -211,71 +197,73 @@ if ($_POST['cell']) {
         for (let [key, value] of map2) {
             selectedCells.set(key, value);
         }
-     
+
     }
 
-        /**
-         * function to make Poor player's choice visible.
-         * computer is not suppose to allow him to win :P
-         *
-         * @param obj
-         */
+    /**
+     * function to make Poor player's choice visible.
+     * computer is not suppose to allow him to win :P
+     *
+     * @param obj
+     */
 
 
-        function cellTapped(obj) {
-            const cellTapped = $(obj).data("id");
-            if (selectedCells.has(cellTapped)) {
-                alert('Oops!, cannot select this cell. Try another one.');
-                return;
-            }
+    function cellTapped(obj) {
+        const cellTapped = $(obj).data("id");
+        if (selectedCells.has(cellTapped)) {
+            alert('Oops!, cannot select this cell. Try another one.');
+            return;
+        }
 
-            const cell = document.getElementById('cell_' + cellTapped);
+        const cell = document.getElementById('cell_' + cellTapped);
 
-            cell.innerHTML = '<img src="images/cross.png" alt="cross" width="75" height="75">';
-            userSelectedCells.set(cellTapped, 'x');
+        cell.innerHTML = '<img src="images/cross.png" alt="cross" width="75" height="75">';
+        userSelectedCells.set(cellTapped, 'x');
 
+        mergeMaps(computerSelectedCells, userSelectedCells);
+
+        let did_player_win = WinPos(userSelectedCells);
+        if (did_player_win) {
+            pointsUpdate('win');
+            alert('Yay! Congratulations You Won!!!!');
+        } else if (isDraw(selectedCells)) {
+            alert('Match Drawn');
+        } else {
+            chooseOpponentCell(cellTapped);
+        }
+    }
+
+
+    /**
+     * function to determine computer choice.
+     * Aim of this function is to make player's life miserable :P
+     * @param cellTapped
+     */
+
+    function chooseOpponentCell(cellTapped) {
+        // TODO: set computer game logic.
+        // - Try to make it hard for the user to win.
+
+
+        const toBeSelectedCell = Math.floor(Math.random() * 9) + 1
+        if (!selectedCells.has(toBeSelectedCell)) {
+            const cell = document.getElementById('cell_' + toBeSelectedCell);
+            computerSelectedCells.set(toBeSelectedCell, 'o');
             mergeMaps(computerSelectedCells, userSelectedCells);
-
-            let did_player_win = WinPos(userSelectedCells);
-            if (did_player_win) {
-                alert('Yay! Congratulations You Won!!!!');
-            }else if(isDraw(selectedCells)){
-                alert('Match Drawn');
-            } else {
-                chooseOpponentCell(cellTapped);
-            }
+            //console.log(computerSelectedCells);
+            cell.innerHTML = '<img src="images/zero.png" alt="zero" width="75" height="75">';
+        } else {
+            chooseOpponentCell();
         }
 
-
-        /**
-         * function to determine computer choice.
-         * Aim of this function is to make player's life miserable :P
-         * @param cellTapped
-         */
-
-        function chooseOpponentCell(cellTapped) {
-            // TODO: set computer game logic.
-            // - Try to make it hard for the user to win.
-
-
-            const toBeSelectedCell = Math.floor(Math.random() * 9) + 1
-            if (!selectedCells.has(toBeSelectedCell)) {
-                const cell = document.getElementById('cell_' + toBeSelectedCell);
-                computerSelectedCells.set(toBeSelectedCell, 'o');
-                mergeMaps(computerSelectedCells, userSelectedCells);
-                //console.log(computerSelectedCells);
-                cell.innerHTML = '<img src="images/zero.png" alt="zero" width="75" height="75">';
-            } else {
-                chooseOpponentCell();
-            }
-
-            if(WinPos(computerSelectedCells)){
-                alert('Sorry! You lost. Better luck next time.');
-            }else if(isDraw(selectedCells)){
-                alert('Match Drawn');
-            }
-
+        if (WinPos(computerSelectedCells)) {
+            pointsUpdate('loose');
+            alert('Sorry! You lost. Better luck next time.');
+        } else if (isDraw(selectedCells)) {
+            alert('Match Drawn');
         }
+
+    }
 </script>
 
 </html>
