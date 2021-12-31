@@ -4,7 +4,6 @@ $showError = false;
 session_start();
 include 'backend/dbconnect.php';
 include 'backend/navBar.php';
-include  'backend/functions.php';
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     header("location: login.php");
     exit;
@@ -36,7 +35,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
                 </button>
             </div>
             <div class="modal-body">
-                This will reset the game and you will loose points. Are you sure?
+                This will reset the game. Are you sure?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -49,45 +48,58 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
 <body>
     <center>
         <font color="white">
-            <h2>
+            <h3>
                 Tic-Tac-Toe
                 <?php
                 echo "<br>";
                 echo "Welcome ";
                 echo $_SESSION['username'];
                 ?>
-            </h2>
+            </h3>
         </font>
         <hr>
-        <h4><?php echo currentPlayer(); ?></h4>
+        <div class="difficultyOption">
 
-        <!-- Tic Tac Toe main game layout starts -->
+            <center>
+                <h1>Please select the difficulty level </h1>
+                <!-- two buttons for difficulty level with more size -->
+                <button type="submit" name="difficulty" value="easy" class="diffButton btn btn-warning" onclick="levelOfDifficulty('easy')">Easy</button>
+                <button type="submit" name="difficulty" value="hard" class="diffButton btn btn-danger" onclick="levelOfDifficulty('hard')">Expert</button>
+            </center>
+        </div>
 
-        <center>
-            <form method="post" id="gameForm" action="welcome.php" style="display: inline-block;">
-                <table class="tic-tac-toe" style="text-align: center">
-                    <tbody>
-                        <tr>
-                            <td id="cell_1" data-id="1" onclick="cellTapped(this)"></td>
-                            <td id="cell_2" data-id="2" onclick="cellTapped(this)"></td>
-                            <td id="cell_3" data-id="3" onclick="cellTapped(this)"></td>
-                        </tr>
-                        <tr>
-                            <td id="cell_4" data-id="4" onclick="cellTapped(this)"></td>
-                            <td id="cell_5" data-id="5" onclick="cellTapped(this)"></td>
-                            <td id="cell_6" data-id="6" onclick="cellTapped(this)"></td>
-                        </tr>
-                        <tr>
-                            <td id="cell_7" data-id="7" onclick="cellTapped(this)"></td>
-                            <td id="cell_8" data-id="8" onclick="cellTapped(this)"></td>
-                            <td id="cell_9" data-id="9" onclick="cellTapped(this)"></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- <button type="submit" disabled id="play-btn">Play</button> -->
-                <button type="button" class="reset-btn" data-toggle="modal" data-target="#resetModal">Reset</button>
-            </form>
-        </center>
+        <div class="gameLayout">
+
+            <h4><?php echo $_SESSION['username'] ?>'s turn</h4>
+
+            <!-- Tic Tac Toe main game layout starts -->
+
+            <center>
+                <form method="post" id="gameForm" action="welcome.php" style="display: inline-block;">
+                    <table class="tic-tac-toe" style="text-align: center">
+                        <tbody>
+                            <tr>
+                                <td id="cell_1" data-id="1" onclick="cellTapped(this)"></td>
+                                <td id="cell_2" data-id="2" onclick="cellTapped(this)"></td>
+                                <td id="cell_3" data-id="3" onclick="cellTapped(this)"></td>
+                            </tr>
+                            <tr>
+                                <td id="cell_4" data-id="4" onclick="cellTapped(this)"></td>
+                                <td id="cell_5" data-id="5" onclick="cellTapped(this)"></td>
+                                <td id="cell_6" data-id="6" onclick="cellTapped(this)"></td>
+                            </tr>
+                            <tr>
+                                <td id="cell_7" data-id="7" onclick="cellTapped(this)"></td>
+                                <td id="cell_8" data-id="8" onclick="cellTapped(this)"></td>
+                                <td id="cell_9" data-id="9" onclick="cellTapped(this)"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <button type="submit" disabled id="play-btn">Play</button> -->
+                    <button type="button" class="reset-btn" data-toggle="modal" data-target="#resetModal">Reset</button>
+                </form>
+            </center>
+        </div>
         <!-- Tic Tac Toe main game layout ends -->
         <script>
             function formSubmit(radioObj) {
@@ -96,6 +108,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
                 }
             }
         </script>
+
+        <br><br>
 
         <footer class="footer mt-auto py-3 bg-dark">
             <div class="container">
@@ -109,22 +123,41 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script type="text/javascript">
-    let turn = "player";
 
+<script type="text/javascript">
+    $(".gameLayout").hide();
+
+    var difficultyLevel = 'easy';
+
+    /**@abstract
+     * @description This function used to make the game layout and difficulty layout visible
+     * @param {string} difficultyLevel 
+     * @returns {None}
+     */
+
+    function levelOfDifficulty(difficultyLevel) {
+
+        difficultyLevel = difficultyLevel;
+        $(".difficultyOption").hide();
+        $(".gameLayout").show();
+
+    }
+
+    console.log(difficultyLevel);
+    
     let selectedCells = new Map();
     let computerSelectedCells = new Map();
     let userSelectedCells = new Map();
 
     /**@abstract
      * @param {result} result - result of the game
-     * AJAX call to update the leaderboard 
+     * @description AJAX call to update the leaderboard 
      */
-
 
     function pointsUpdate(result) {
         $.ajax({
-            url: 'backend/updateMatchScore.php?result=' + result,'type': 'GET',
+            url: 'backend/updateMatchScore.php?result=' + result,
+            'type': 'GET',
             complete: function(response) {
                 console.log(response.responseText);
             },
@@ -149,9 +182,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
         return false;
     }
 
-
     /**
-     * function to check if the player (user or cpu) has won the game
+     * @description function to check if the player (user or cpu) has won the game
      * checking if the win cells are filled or not;
      * @return {boolean}
      * @param {Map} selectedCells
@@ -160,8 +192,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     function WinPos(selectedCells) {
 
         if (selectedCells.has(1) && selectedCells.has(5) && selectedCells.has(9)) {
-            return true;
-        } else if (selectedCells.has(3) && selectedCells.has(4) && selectedCells.has(7)) {
             return true;
         } else if (selectedCells.has(3) && selectedCells.has(6) && selectedCells.has(9)) {
             return true;
@@ -183,7 +213,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     }
 
     /**@abstract
-     * function to merge two hashmaps ignoring the duplicates
+     * @description function to merge two hashmaps ignoring the duplicates
      * will be used to check all the visited and empty cells
      * @param map1
      * @param map2
@@ -203,7 +233,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     /**
      * function to make Poor player's choice visible.
      * computer is not suppose to allow him to win :P
-     *
      * @param obj
      */
 
@@ -211,7 +240,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     function cellTapped(obj) {
         const cellTapped = $(obj).data("id");
         if (selectedCells.has(cellTapped)) {
-            alert('Oops!, cannot select this cell. Try another one.');
+            confirm('Oops!, cannot select this cell. Try another one.');
             return;
         }
 
@@ -233,37 +262,50 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
         }
     }
 
-
     /**
      * function to determine computer choice.
+     * finding random number from 1 to 9 excluding the already selected cells
      * Aim of this function is to make player's life miserable :P
-     * @param cellTapped
+     *  @param {int} cellTapped
      */
 
     function chooseOpponentCell(cellTapped) {
-        // TODO: set computer game logic.
-        // - Try to make it hard for the user to win.
+        // TODO: - Try to make it hard for the user to win.
 
+        var toBeSelectedCell = -1;
 
-        const toBeSelectedCell = Math.floor(Math.random() * 9) + 1
-        if (!selectedCells.has(toBeSelectedCell)) {
-            const cell = document.getElementById('cell_' + toBeSelectedCell);
-            computerSelectedCells.set(toBeSelectedCell, 'o');
-            mergeMaps(computerSelectedCells, userSelectedCells);
-            //console.log(computerSelectedCells);
-            cell.innerHTML = '<img src="images/zero.png" alt="zero" width="75" height="75">';
+        if (difficultyLevel === 'easy') {
+
+            toBeSelectedCell = Math.floor(Math.random() * 9) + 1;
+
+            while (selectedCells.has(toBeSelectedCell)) {
+                toBeSelectedCell = Math.floor(Math.random() * 9) + 1;
+            }
+
         } else {
-            chooseOpponentCell();
+
+            console.log("difficulty level is hard");
         }
+
+        const cell = document.getElementById('cell_' + toBeSelectedCell);
+
+        computerSelectedCells.set(toBeSelectedCell, 'o');
+
+        mergeMaps(computerSelectedCells, userSelectedCells);
+
+        cell.innerHTML = '<img src="images/zero.png" alt="zero" width="75" height="75">';
 
         if (WinPos(computerSelectedCells)) {
             pointsUpdate('loose');
-            alert('Sorry! You lost. Better luck next time.');
+            confirm('Sorry! You lost. Better luck next time.');
         } else if (isDraw(selectedCells)) {
-            alert('Match Drawn');
+            pointsUpdate('draw');
+            confirm('Match Drawn');
         }
 
     }
 </script>
+
+
 
 </html>
