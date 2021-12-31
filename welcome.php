@@ -1,14 +1,14 @@
 <?php
-    $login = false;
-    $showError = false;
-    session_start();
-    include 'backend/dbconnect.php';
-    include 'backend/navBar.php';
-    include  'backend/functions.php';
-    if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
-        header("location: login.php");
-        exit;
-    }
+$login = false;
+$showError = false;
+session_start();
+include 'backend/dbconnect.php';
+include 'backend/navBar.php';
+include  'backend/functions.php';
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
+    header("location: login.php");
+    exit;
+}
 ?>
 <?php
 if ($_POST['cell']) {
@@ -24,8 +24,7 @@ if ($_POST['cell']) {
         if (!$result) {
             echo "<script>alert('Error updating score');</script>";
         }
-    }
-    else if ($win === 'comp') {
+    } else if ($win === 'comp') {
         echo "<script>alert('You lose!');</script>";
         //update leaderboard score in database
         $sql = "UPDATE leaderboard SET score = score - 10 WHERE username = '" . $_SESSION['username'] . "'";
@@ -38,23 +37,24 @@ if ($_POST['cell']) {
         }
     }
 }
-if ($turns >= 5000) {
-    //update leaderboard score in database
-    $sql = "UPDATE leaderboard SET score = score - 5 WHERE username = '" . $_SESSION['username'] . "'";
-    $result = mysqli_query($conn, $sql);
-    $sql = "UPDATE leaderboard SET matches = matches + 1 WHERE username = '" . $_SESSION['username'] . "'";
-    $result = mysqli_query($conn, $sql);
-    resetBoard();
-    echo "<script>alert('Draw!');</script>";
-    //header("location: leaderboard.php");
-}
+// if ($turns >= 5000) {
+//     //update leaderboard score in database
+//     $sql = "UPDATE leaderboard SET score = score - 5 WHERE username = '" . $_SESSION['username'] . "'";
+//     $result = mysqli_query($conn, $sql);
+//     $sql = "UPDATE leaderboard SET matches = matches + 1 WHERE username = '" . $_SESSION['username'] . "'";
+//     $result = mysqli_query($conn, $sql);
+//     resetBoard();
+//     echo "<script>alert('Draw!');</script>";
+//     //header("location: leaderboard.php");
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title> Tic Tac Toe |
         <?php
-            echo $_SESSION['username'];
+        echo $_SESSION['username'];
         ?>
     </title>
     <meta charset="utf-8">
@@ -77,20 +77,21 @@ if ($turns >= 5000) {
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary"><a href="backend/functions.php?reset=true">Reset</a></button>
+                <button type="button" class="btn btn-primary"><a href="welcome.php">Reset</a></button>
             </div>
         </div>
     </div>
 </div>
+
 <body>
-<!--    <center>-->
+    <center>
         <font color="white">
             <h2>
                 Tic-Tac-Toe
                 <?php
-                    echo "<br>";
-                    echo "Welcome ";
-                    echo $_SESSION['username'];
+                echo "<br>";
+                echo "Welcome ";
+                echo $_SESSION['username'];
                 ?>
             </h2>
         </font>
@@ -98,28 +99,28 @@ if ($turns >= 5000) {
         <h4><?php echo currentPlayer(); ?></h4>
         <!-- Tic Tac Toe main game layout starts -->
         <?php
-            $_SESSION['visitedArrUser'] = [];
-            $_SESSION['visitedArrComp'] = [];
-            $_SESSION['visited']        = [];
+        $_SESSION['visitedArrUser'] = array();
+        $_SESSION['visitedArrComp'] = array();
+        $_SESSION['visited']        = array();
         ?>
         <center>
             <form method="post" id="gameForm" action="welcome.php" style="display: inline-block;">
                 <table class="tic-tac-toe" style="text-align: center">
                     <tbody>
                         <tr>
-                            <td id="cell_1" data-id="1" onclick="cell_tapped(this)"></td>
-                            <td id="cell_2" data-id="2" onclick="cell_tapped(this)"></td>
-                            <td id="cell_3" data-id="3" onclick="cell_tapped(this)"></td>
+                            <td id="cell_1" data-id="1" onclick="cellTapped(this)"></td>
+                            <td id="cell_2" data-id="2" onclick="cellTapped(this)"></td>
+                            <td id="cell_3" data-id="3" onclick="cellTapped(this)"></td>
                         </tr>
                         <tr>
-                            <td id="cell_4" data-id="4" onclick="cell_tapped(this)"></td>
-                            <td id="cell_5" data-id="5" onclick="cell_tapped(this)"></td>
-                            <td id="cell_6" data-id="6" onclick="cell_tapped(this)"></td>
+                            <td id="cell_4" data-id="4" onclick="cellTapped(this)"></td>
+                            <td id="cell_5" data-id="5" onclick="cellTapped(this)"></td>
+                            <td id="cell_6" data-id="6" onclick="cellTapped(this)"></td>
                         </tr>
                         <tr>
-                            <td id="cell_7" data-id="7" onclick="cell_tapped(this)"></td>
-                            <td id="cell_8" data-id="8" onclick="cell_tapped(this)"></td>
-                            <td id="cell_9" data-id="9" onclick="cell_tapped(this)"></td>
+                            <td id="cell_7" data-id="7" onclick="cellTapped(this)"></td>
+                            <td id="cell_8" data-id="8" onclick="cellTapped(this)"></td>
+                            <td id="cell_9" data-id="9" onclick="cellTapped(this)"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -135,68 +136,146 @@ if ($turns >= 5000) {
                 }
             }
         </script>
-        <?php
-            echo "USER ";
-            print_r($_SESSION['visitedArrUser']);
-            echo "   COMP ";
-            print_r($_SESSION['visitedArrComp']);
-        ?>
+
         <footer class="footer mt-auto py-3 bg-dark">
             <div class="container">
                 <span class="text-muted">By Kushagra Sharma</span>
             </div>
         </footer>
 </body>
+
 <script type="text/javascript">
     let turn = "player";
-    let selected_cells = [];
-    let computer_selected_cells = [];
-    let user_selected_cells     = [];
-    function enableButton() {
-        document.getElementById('play-btn').disabled = false;
-    }
-    /**
-     * function to make Poor player's choice visible.
-     * computer is not suppose to allow him to win :P
-     *
-     * @param obj
+
+    let selectedCells = new Map();
+    let computerSelectedCells = new Map();
+    let userSelectedCells = new Map();
+
+    /**@abstract
+     * @param {Maps} selectedCells
+     * check if the match is drawn
+     * checking if the size of the selected cells is equal to 9
+     * @returns {boolean}
      */
-    function cell_tapped(obj) {
-        const cell_tapped = $(obj).data("id");
-        if (selected_cells.indexOf(cell_tapped) !== -1) {
-            alert('Oops!, cannot select this cell. Try another one.');
-            return;
+
+    function isDraw(selectedCells) {
+        if (selectedCells.size == 9) {
+            return true;
         }
-        const cell = document.getElementById('cell_' + cell_tapped);
-        cell.innerHTML = '<img src="images/cross.png" alt="cross" width="75" height="75">';
-        selected_cells.push(cell_tapped);
-        // TODO: need to determine if the selected cell makes the player win
-        let did_player_win = false;
-        if (did_player_win) {
-            alert('Yay! Congratulations You Won!!!!');
-        } else {
-            choose_opponent_cell(cell_tapped);
-        }
+        return false;
     }
+
+
     /**
-     * function to determine computer choice.
-     * Aim of this function is to make player's life miserable :P
-     *
-     * @param cell_tapped
+     * function to check if the player (user or cpu) has won the game
+     * checking if the win cells are filled or not;
+     * @return {boolean}
+     * @param {Map} selectedCells
      */
-    function choose_opponent_cell(cell_tapped) {
-        // TODO: set computer game logic.
-        // - Check which cell user selected
-        // - Check all the cells selected by user and find if he is about to win ?
-        // - Check all the cells selected by computer and find if computer is about to win ?
-        // - Try to make it hard for the user to win.
-        const to_be_selected_cell = Math.floor(Math.random() * 9) + 1
-        if (selected_cells.indexOf(to_be_selected_cell) === -1) {
-            const cell = document.getElementById('cell_' + to_be_selected_cell);
-            cell.innerHTML = '<img src="images/zero.png" alt="zero" width="75" height="75">';
-        } else {
-            choose_opponent_cell();
+
+    function WinPos(selectedCells) {
+
+        if (selectedCells.has(1) && selectedCells.has(5) && selectedCells.has(9)) {
+            return true;
+        } else if (selectedCells.has(3) && selectedCells.has(4) && selectedCells.has(7)) {
+            return true;
+        } else if (selectedCells.has(3) && selectedCells.has(6) && selectedCells.has(9)) {
+            return true;
+        } else if (selectedCells.has(1) && selectedCells.has(2) && selectedCells.has(3)) {
+            return true;
+        } else if (selectedCells.has(4) && selectedCells.has(5) && selectedCells.has(6)) {
+            return true;
+        } else if (selectedCells.has(7) && selectedCells.has(8) && selectedCells.has(9)) {
+            return true;
+        } else if (selectedCells.has(1) && selectedCells.has(4) && selectedCells.has(7)) {
+            return true;
+        } else if (selectedCells.has(2) && selectedCells.has(5) && selectedCells.has(8)) {
+            return true;
         }
+
+        return false;
     }
+
+    /**@abstract
+     * function to merge two hashmaps ignoring the duplicates
+     * will be used to check all the visited and empty cells
+     * @param map1
+     * @param map2
+     * @returns {None}
+     */
+
+    function mergeMaps(map1, map2) {
+        for (let [key, value] of map1) {
+            selectedCells.set(key, value);
+        }
+        for (let [key, value] of map2) {
+            selectedCells.set(key, value);
+        }
+     
+    }
+
+        /**
+         * function to make Poor player's choice visible.
+         * computer is not suppose to allow him to win :P
+         *
+         * @param obj
+         */
+
+
+        function cellTapped(obj) {
+            const cellTapped = $(obj).data("id");
+            if (selectedCells.has(cellTapped)) {
+                alert('Oops!, cannot select this cell. Try another one.');
+                return;
+            }
+
+            const cell = document.getElementById('cell_' + cellTapped);
+
+            cell.innerHTML = '<img src="images/cross.png" alt="cross" width="75" height="75">';
+            userSelectedCells.set(cellTapped, 'x');
+
+            mergeMaps(computerSelectedCells, userSelectedCells);
+
+            let did_player_win = WinPos(userSelectedCells);
+            if (did_player_win) {
+                alert('Yay! Congratulations You Won!!!!');
+            }else if(isDraw(selectedCells)){
+                alert('Match Drawn');
+            } else {
+                chooseOpponentCell(cellTapped);
+            }
+        }
+
+
+        /**
+         * function to determine computer choice.
+         * Aim of this function is to make player's life miserable :P
+         * @param cellTapped
+         */
+
+        function chooseOpponentCell(cellTapped) {
+            // TODO: set computer game logic.
+            // - Try to make it hard for the user to win.
+
+
+            const toBeSelectedCell = Math.floor(Math.random() * 9) + 1
+            if (!selectedCells.has(toBeSelectedCell)) {
+                const cell = document.getElementById('cell_' + toBeSelectedCell);
+                computerSelectedCells.set(toBeSelectedCell, 'o');
+                mergeMaps(computerSelectedCells, userSelectedCells);
+                //console.log(computerSelectedCells);
+                cell.innerHTML = '<img src="images/zero.png" alt="zero" width="75" height="75">';
+            } else {
+                chooseOpponentCell();
+            }
+
+            if(WinPos(computerSelectedCells)){
+                alert('Sorry! You lost. Better luck next time.');
+            }else if(isDraw(selectedCells)){
+                alert('Match Drawn');
+            }
+
+        }
 </script>
+
 </html>
