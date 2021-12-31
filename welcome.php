@@ -63,8 +63,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
             <center>
                 <h1>Please select the difficulty level </h1>
                 <!-- two buttons for difficulty level with more size -->
-                <button type="submit" name="difficulty" value="easy" class="diffButton btn btn-warning" onclick="levelOfDifficulty('easy')">Easy</button>
-                <button type="submit" name="difficulty" value="hard" class="diffButton btn btn-danger" onclick="levelOfDifficulty('hard')">Expert</button>
+                <button type="submit" name="difficulty" value="easy" class="diffButton btn btn-warning" onclick="levelOfDifficulty()">Easy</button>
+                <button type="submit" name="difficulty" value="hard" class="diffButton btn btn-danger" onclick="levelOfDifficulty()">Expert</button>
             </center>
         </div>
 
@@ -127,24 +127,32 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
 <script type="text/javascript">
     $(".gameLayout").hide();
 
-    var difficultyLevel = 'easy';
+
+    /**@abstract
+     * @description This is called when the user clicks on the easy or expert button
+     */
+
+    var difficulyLevel;
+
+    $("Button").click(function() {
+        difficultyLevel = $(this).val();
+        console.log(difficultyLevel);
+    });
+
 
     /**@abstract
      * @description This function used to make the game layout and difficulty layout visible
-     * @param {string} difficultyLevel 
+     * @param {None}
      * @returns {None}
      */
 
-    function levelOfDifficulty(difficultyLevel) {
+    function levelOfDifficulty() {
 
-        difficultyLevel = difficultyLevel;
         $(".difficultyOption").hide();
         $(".gameLayout").show();
 
     }
 
-    console.log(difficultyLevel);
-    
     let selectedCells = new Map();
     let computerSelectedCells = new Map();
     let userSelectedCells = new Map();
@@ -270,7 +278,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
      */
 
     function chooseOpponentCell(cellTapped) {
-        // TODO: - Try to make it hard for the user to win.
 
         var toBeSelectedCell = -1;
 
@@ -282,9 +289,44 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
                 toBeSelectedCell = Math.floor(Math.random() * 9) + 1;
             }
 
-        } else {
+          /**
+           * @description The below code is to make the game difficult
+           * if the user selects the center cell then the computer will select the corner cell
+           * if the user selects the corner cell then the computer will select the center cell
+           */ 
 
-            console.log("difficulty level is hard");
+        } else if (difficultyLevel === 'hard') {
+
+
+            //check if the user has already selected the center cell
+            if (!selectedCells.has(5)) {
+                toBeSelectedCell = 5;
+            } else if (!selectedCells.has(1)) {
+                toBeSelectedCell = 1;
+            } else if (!selectedCells.has(3)) {
+                toBeSelectedCell = 3;
+            } else if (!selectedCells.has(7)) {
+                toBeSelectedCell = 7;
+            } else if (!selectedCells.has(9)) {
+                toBeSelectedCell = 9;
+            } else if (!selectedCells.has(2)) {
+                toBeSelectedCell = 2;
+            } else if (!selectedCells.has(4)) {
+                toBeSelectedCell = 4;
+            } else if (!selectedCells.has(6)) {
+                toBeSelectedCell = 6;
+            } else if (!selectedCells.has(8)) {
+                toBeSelectedCell = 8;
+            } else {
+
+                toBeSelectedCell = Math.floor(Math.random() * 9) + 1;
+
+                while (selectedCells.has(toBeSelectedCell)) {
+                    toBeSelectedCell = Math.floor(Math.random() * 9) + 1;
+                }
+
+            }
+
         }
 
         const cell = document.getElementById('cell_' + toBeSelectedCell);
