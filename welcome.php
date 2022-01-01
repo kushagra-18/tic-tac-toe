@@ -44,6 +44,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
         </div>
     </div>
 </div>
+<script src="js/confetti.js"></script>
+
+<!-- <script>
+startConfetti();
+</script> -->
 
 <body>
     <center>
@@ -56,8 +61,23 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
                 echo $_SESSION['username'];
                 ?>
             </h3>
+
+            <script>
+
+            </script>
         </font>
         <hr>
+
+        <div class ="playerWon">
+
+            <font color="yellow">
+                <h2> Congrats! <?php echo $_SESSION['username']; ?> You have Won!!! </h2>
+                <button type="submit" name="playAgain" value="" class="btn btn-warning" onclick= "window.location.href='welcome.php'">Play Again</button>
+
+            </font>
+
+        </div>
+
         <div class="difficultyOption">
 
             <center>
@@ -125,8 +145,10 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
 
 
 <script type="text/javascript">
-    $(".gameLayout").hide();
+  
+   $(".gameLayout").hide();
 
+    $(".playerWon").hide();
 
     /**@abstract
      * @description This is called when the user clicks on the easy or expert button
@@ -145,6 +167,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
      * @param {None}
      * @returns {None}
      */
+
+    $(".difficultyOption").show();
 
     function levelOfDifficulty() {
 
@@ -175,6 +199,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
         });
         return false;
     }
+
 
     /**@abstract
      * @param {Maps} selectedCells
@@ -262,7 +287,13 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
         let did_player_win = WinPos(userSelectedCells);
         if (did_player_win) {
             pointsUpdate('win');
-            alert('Yay! Congratulations You Won!!!!');
+ 
+            $(".playerWon").show();
+            
+            $(".gameLayout").hide();
+
+            startConfetti();
+
         } else if (isDraw(selectedCells)) {
             alert('Match Drawn');
         } else {
@@ -289,11 +320,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
                 toBeSelectedCell = Math.floor(Math.random() * 9) + 1;
             }
 
-          /**
-           * @description The below code is to make the game difficult
-           * if the user selects the center cell then the computer will select the corner cell
-           * if the user selects the corner cell then the computer will select the center cell
-           */ 
+            /**
+             * @description The below code is to make the game difficult
+             * if the user selects the center cell then the computer will select the corner cell
+             * if the user selects the corner cell then the computer will select the center cell
+             */
 
         } else if (difficultyLevel === 'hard') {
 

@@ -1,3 +1,16 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<style>
+  .inputImage {
+    display: block;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+  }
+</style>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="modal fade" id="userProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -6,32 +19,63 @@
         </button>
       </div>
       <div class="modal-body">
-        <?php
-        $sql = "SELECT * FROM leaderboard INNER JOIN sign_up on leaderboard.username = sign_up.username WHERE leaderboard.username = '" . $_SESSION['username'] . "'";
-        $result = mysqli_query($conn, $sql);
-        $row = mysqli_fetch_assoc($result);
-        $fullname = $row['name'];
-        $email = $row['email'];
 
-        //center all elements with first character aligned
+        <div class="form-group">
+          <form role="form" class="form-horizontal" name="uploadImage" id="uploadImage" action="upload.php" method="post" enctype="multipart/form-data">
+            <center>
+              <div class="imagewrap">
+                <form runat="server">
+                  <img id="uploadedImage" src='images/background.jpg' class='img-round' alt='profile picture' width='120' height='120'>
+                  <input id="inputImage" class="inputImage" type="file" name="somename" size="chars">
+                </form>
+                <button type='button' id="buttonImage" onclick="" class='imgUpload btn btn-primary' data-toggle='modal' data-target='#updateProfile'><i class='fa fa-camera'></i></button>
+              </div>
+            </center>
 
-        echo "<center>";
-        echo 'Full Name';
-        echo "<h6>" . $fullname . "</h6>";
-        echo '<label for="recipient-name" class="col-form-label">Email</label>';
-        echo "<h6>" . $email . "</h6>";
-        echo '<label for="recipient-name" class="col-form-label">Matches</label>';
-        echo "<h6>" . $row['matches'] . "</h6>";
-        echo '<label for="recipient-name" class="col-form-label">Full Name</label>';
-        echo "<h6>" . $row['wins'] . "</h6>";
+            <?php
+            $sql = "SELECT * FROM leaderboard INNER JOIN sign_up on leaderboard.username = sign_up.username WHERE leaderboard.username = '" . $_SESSION['username'] . "'";
+            $result = mysqli_query($conn, $sql);
+            $row = mysqli_fetch_assoc($result);
+            $fullname = $row['name'];
+            $email = $row['email'];
 
-        echo "</center>";
-  
-        ?>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            echo 'Full Name';
+            echo "<h6>" . $fullname . "</h6>";
+            echo 'Email';
+            echo "<h6>" . $email . "</h6>";
+            echo 'Matches';
+            echo "<h6>" . $row['matches'] . "</h6>";
+            echo 'Wins';
+            echo "<h6>" . $row['wins'] . "</h6>";
+
+
+            ?>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+
+<script type="text/javascript">
+  uploadedImage.onchange = evt => {
+    const [file] = uploadedImage.files
+    if (file) {
+      inputImage.src = URL.createObjectURL(file)
+    }
+  }
+
+
+  $('#buttonImage').click(function() {
+    $('input').click();
+  });
+
+  function formSubmit() {
+    document.getElementById("uploadImage").submit();
+  }
+</script>
