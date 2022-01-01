@@ -48,13 +48,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
 
         if ($pass == $passCheck && $exists == false) {
-            $sql = "INSERT INTO sign_up (name, email, password,username) VALUES ('$name', '$email', '$pass','$username')";
+            //add current date to database
+
+            $date = date("Y-m-d");
+            $sql = "INSERT INTO sign_up (name, email, password,username,createdOn) VALUES ('$name', '$email', '$pass','$username','$date')";
             $result = mysqli_query($conn, $sql);
 
             $sqlLeaderboard = "INSERT INTO leaderboard (username,score) VALUES ('$username',0)";
             $resultLeaderboard = mysqli_query($conn, $sqlLeaderboard);
 
-            if(!$resultLeaderboard){
+            if (!$resultLeaderboard) {
                 //sql error
                 echo "Error: " . $sqlLeaderboard . "<br>" . mysqli_error($conn);
             }
@@ -98,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             -ms-transform: translate(-20%, -10%);
             transform: translate(-50%, -50%);
             -webkit-animation: fadein 1s, expand 0.5s;
-             /* -webkit-animation: expand 0.5s; */
+            /* -webkit-animation: expand 0.5s; */
         }
 
         @-webkit-keyframes fadein {

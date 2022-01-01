@@ -20,24 +20,29 @@
       </div>
       <div class="modal-body">
 
+        <?php
+        $sql = "SELECT * FROM leaderboard INNER JOIN sign_up on leaderboard.username = sign_up.username WHERE leaderboard.username = '" . $_SESSION['username'] . "'";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+
+        ?>
+
         <div class="form-group">
-          <form role="form" class="form-horizontal" name="uploadImage" id="uploadImage" action="upload.php" method="post" enctype="multipart/form-data">
+          <form role="form" class="form-horizontal" name="uploadImage" id="uploadImage" action="backend/upload.php" method="post" enctype="multipart/form-data">
             <center>
               <div class="imagewrap">
-                <form runat="server">
-                  <img id="uploadedImage" src='images/background.jpg' class='img-round' alt='profile picture' width='120' height='120'>
-                  <input id="inputImage" class="inputImage" type="file" name="somename" size="chars">
-                </form>
+                <img id="uploadedImage" src=<?php echo $row['imagePath']; ?> class='img-round' alt='profile picture' width='120' height='120'>
+                <input id="inputImage" name="inputImage" class="inputImage" type="file" name="somename" size="chars">
                 <button type='button' id="buttonImage" onclick="" class='imgUpload btn btn-primary' data-toggle='modal' data-target='#updateProfile'><i class='fa fa-camera'></i></button>
               </div>
             </center>
 
             <?php
-            $sql = "SELECT * FROM leaderboard INNER JOIN sign_up on leaderboard.username = sign_up.username WHERE leaderboard.username = '" . $_SESSION['username'] . "'";
-            $result = mysqli_query($conn, $sql);
-            $row = mysqli_fetch_assoc($result);
+
             $fullname = $row['name'];
             $email = $row['email'];
+
+            echo "<hr>";
 
             echo 'Full Name';
             echo "<h6>" . $fullname . "</h6>";
@@ -48,9 +53,11 @@
             echo 'Wins';
             echo "<h6>" . $row['wins'] . "</h6>";
 
-
             ?>
             <div class="modal-footer">
+
+              <p class="text-muted credit" style="color:#fff"><?php echo "Playing since " . $row['createdOn']; ?></p>
+
               <button type="submit" class="btn btn-primary">Save changes</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
@@ -63,13 +70,7 @@
 
 
 <script type="text/javascript">
-  uploadedImage.onchange = evt => {
-    const [file] = uploadedImage.files
-    if (file) {
-      inputImage.src = URL.createObjectURL(file)
-    }
-  }
-
+ 
 
   $('#buttonImage').click(function() {
     $('input').click();

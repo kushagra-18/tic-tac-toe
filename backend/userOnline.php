@@ -1,8 +1,4 @@
-<?php
 
-include 'dbconnect.php';
-
-session_start();
 
 //update current timestamp in database
 $sql = "UPDATE leaderboard SET usertime = NOW() WHERE username = '" . $_SESSION['username'] . "'";
