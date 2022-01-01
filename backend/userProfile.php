@@ -7,6 +7,21 @@
     width: 0;
     height: 0;
   }
+
+  #container {
+    width: 120px;
+    height: 120px;
+    border-radius: 100px;
+    background: #ccc;
+  }
+
+  #name {
+    width: 100%;
+    text-align: center;
+    color: black;
+    font-size: 52px;
+    line-height: 100px;
+  }
 </style>
 
 
@@ -31,7 +46,17 @@
           <form role="form" class="form-horizontal" name="uploadImage" id="uploadImage" action="backend/upload.php" method="post" enctype="multipart/form-data">
             <center>
               <div class="imagewrap">
-                <img id="uploadedImage" src=<?php echo $row['imagePath']; ?> class='img-round' alt='profile picture' width='120' height='120'>
+
+                <?php if ($row['imagePath'] == "") { ?>
+                  <!-- <img id="uploadedImage" src="images/blankDP.png" class='img-round' alt='profile picture' width='120' height='120'> -->
+                  <div id="container">
+                    <div id="name">
+
+                    </div>
+                  </div>
+                <?php } else { ?>
+                  <img id="uploadedImage" src=<?php echo $row['imagePath']; ?> class='img-round' alt='profile picture' width='120' height='120'>
+                <?php } ?>
                 <input id="inputImage" name="inputImage" class="inputImage" type="file" name="somename" size="chars">
                 <button type='button' id="buttonImage" onclick="" class='imgUpload btn btn-primary' data-toggle='modal' data-target='#updateProfile'><i class='fa fa-camera'></i></button>
               </div>
@@ -70,7 +95,17 @@
 
 
 <script type="text/javascript">
- 
+  //get first name from database
+  var name = "<?php echo $row['name']; ?>";
+
+  //get name after space from database
+  var name2 = name.split(" ");
+  var lastname = name2[1];
+  var initials = name.charAt(0) + "" + lastname.charAt(0);
+
+  document.getElementById("name").innerHTML = initials;
+
+
 
   $('#buttonImage').click(function() {
     $('input').click();
