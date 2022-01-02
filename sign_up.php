@@ -116,6 +116,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
+        .jumbotron {
+            background: no-repeat center center;
+            color: #ffffff;
+        }
+
         @keyframes identifier {
 
             0% {
@@ -143,9 +148,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
 
     <center>
-        <h1>
-            <font color="white">Tic-Tac-Toe</font>
-        </h1>
+        <div class="jumbotron">
+
+            <h1>
+                <font color="white">Tic-Tac-Toe</font>
+            </h1>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">

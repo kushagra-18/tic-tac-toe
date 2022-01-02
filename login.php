@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             -ms-transform: translate(-20%, -10%);
             transform: translate(-50%, -50%);
             -webkit-animation: fadein 1s, expand 0.5s;
-             /* -webkit-animation: expand 0.5s; */
+            /* -webkit-animation: expand 0.5s; */
         }
 
         @-webkit-keyframes fadein {
@@ -98,15 +98,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 height: 290px
             }
         }
+
+        .jumbotron {
+            background: no-repeat center center;
+            color: #ffffff;
+        }
     </style>
 </head>
 
 <body>
 
     <center>
-        <h1>
-            <font color="white">Tic-Tac-Toe</font>
-        </h1>
+        <div class="jumbotron">
+
+            <h1>
+                <font color="white">Tic-Tac-Toe</font>
+            </h1>
+        </div>
 
         <!-- animate the div from top to center using js -->
 

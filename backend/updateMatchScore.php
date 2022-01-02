@@ -1,6 +1,8 @@
 
 <?php
 
+include 'dbconnect.php';
+
 session_start();
 
 $result = "";
@@ -12,6 +14,8 @@ if (isset($_GET['result'])) {
 
     if ($result == "win") {
         $arthOperator = '+ 10';
+        $sqlWin = "UPDATE leaderboard SET wins = wins + 1 WHERE  username = '" . $_SESSION['username'] . "'";
+        $resultSql = mysqli_query($conn, $sqlWin);
         updateMatchScore($arthOperator);
     } else if ($result == "loose") {
         $arthOperator = '- 10';
@@ -34,12 +38,6 @@ function updateMatchScore($arthOperator)
     $resultSql = mysqli_query($conn, $sql);
     if (!$resultSql) {
         echo "<script>alert('Error updating score');</script>";
-    }
-
-    //update win count in database
-    if ($result == "win") {
-        $sqlWin = "UPDATE leaderboard SET wins = wins + 1 WHERE  username = '" . $_SESSION['username'] . "'";
-        $resultSql = mysqli_query($conn, $sqlWin);
     }
 }
 ?>

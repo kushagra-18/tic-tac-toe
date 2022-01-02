@@ -46,9 +46,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
 </div>
 <script src="js/confetti.js"></script>
 
-<!-- <script>
-startConfetti();
-</script> -->
 
 <body>
     <center>
@@ -83,8 +80,8 @@ startConfetti();
             <center>
                 <h1>Please select the difficulty level </h1>
                 <!-- two buttons for difficulty level with more size -->
-                <button type="submit" name="difficulty" value="easy" class="diffButton btn btn-warning" onclick="levelOfDifficulty()">Easy</button>
-                <button type="submit" name="difficulty" value="hard" class="diffButton btn btn-danger" onclick="levelOfDifficulty()">Expert</button>
+                <button type="submit" name="difficulty" value="easy" class="btn diffButton btn-warning" onclick="levelOfDifficulty()">Easy</button>
+                <button type="submit" name="difficulty" value="hard" class="btn diffButton btn-danger" onclick="levelOfDifficulty()">Expert</button>
             </center>
         </div>
 

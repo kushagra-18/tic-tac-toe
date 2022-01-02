@@ -48,7 +48,6 @@
               <div class="imagewrap">
 
                 <?php if ($row['imagePath'] == "") { ?>
-                  <!-- <img id="uploadedImage" src="images/blankDP.png" class='img-round' alt='profile picture' width='120' height='120'> -->
                   <div id="container">
                     <div id="name">
 
@@ -68,7 +67,6 @@
             $email = $row['email'];
 
             echo "<hr>";
-
             echo 'Full Name';
             echo "<h6>" . $fullname . "</h6>";
             echo 'Email';
