@@ -2,13 +2,15 @@
 $login = false;
 $showError = false;
 session_start();
-include 'backend/dbconnect.php';
-include 'backend/navBar.php';
+
 
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true) {
     header("location: login.php");
     exit;
 }
+
+include 'backend/dbconnect.php';
+include 'backend/navBar.php';
 
 ?>
 

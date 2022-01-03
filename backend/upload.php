@@ -10,6 +10,14 @@ $uploadOk = 1;
 $imageFileName = "";
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
+
+if (!isset($_SESSION['loggedin'])){
+
+  header("Location: /PHP/tic-tac-toe/index.php");
+  exit;
+
+}else{
+
 // Check if image file is a actual image or fake image
 if(isset($_POST["submit"])) {
   $check = getimagesize($_FILES["inputImage"]["tmp_name"]);
@@ -60,6 +68,7 @@ if ($uploadOk == 0) {
     echo "<script>alert('Image uploaded successfully.');</script>";
   } else {
     echo "Sorry, there was an error uploading your file.";
+    }
   }
 }
 ?>

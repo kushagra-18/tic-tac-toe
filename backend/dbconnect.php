@@ -1,16 +1,18 @@
 <?php
 
 // Connecting to the Database
-// $servername = "localhost";
-// $username = "root";
-// $password = "";
-// $database = "tictactoe";
 
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "tictactoe";
 
-$servername = "l6glqt8gsx37y4hs.cbetxkdyhwsb.us-east-1.rds.amazonaws.com";
-$username = "zdufljbxx02ayg0j";
-$password = "xx70c4amyg6ipj30";
-$database = "zll74kkke20ditz2";
+error_reporting(E_ERROR | E_PARSE);
+
+// $servername = "l6glqt8gsx37y4hs.cbetxkdyhwsb.us-east-1.rds.amazonaws.com";
+// $username = "zdufljbxx02ayg0j";
+// $password = "xx70c4amyg6ipj30";
+// $database = "zll74kkke20ditz2";
 
 
 // Create a connection
@@ -22,4 +24,5 @@ if($conn){
     die("Connection Failed because ".mysqli_connect_error());
 
 }
+
 ?>

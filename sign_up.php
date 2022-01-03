@@ -165,31 +165,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <form action="sign_up.php" method="post">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input data-toggle="tooltip" data-placement="top" title="Make sure your Username is unique and contains only letters and numbers" id="username" type="text" class="form-control" name="username" placeholder="User Name" required>
+                                    <input data-toggle="tooltip" data-placement="top" title="Make sure your Username is unique and contains only letters and numbers" id="username" type="text" class="form-control" name="username" placeholder="User Name" >
 
                                 </div>
                                 <br>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input id="name" type="text" class="form-control" name="name" placeholder="Full Name" required>
+                                    <input id="name" type="text" class="form-control" name="name" placeholder="Full Name" >
 
                                 </div>
                                 <br>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                                    <input data-toggle="tooltip" data-placement="top" title="Make sure your Email is unique" id="email" type="text" class="form-control" name="email" placeholder="Email" onchange="validateEmail(this);" required>
+                                    <input data-toggle="tooltip" data-placement="top" title="Make sure your Email is unique" id="email" type="text" class="form-control" name="email" placeholder="Email" onchange="validateEmail(this);" >
                                     <label id="labelEmailText" style="visibility: hidden; color:red"></label></span></td>
                                 </div>
                                 <br>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                    <input data-toggle="tooltip" data-placement="top" title="Choose a strong password with minimum length of 8, must have a special (@#$%!&), lowercase (a-b), uppercase (A-B) characters and numbers (0-9)." id="password" type="password" class="form-control" name="password" onchange="validatePassword(this)" required placeholder="Password">
+                                    <input data-toggle="tooltip" data-placement="top" title="Choose a strong password with minimum length of 8, must have a special (@#$%!&), lowercase (a-b), uppercase (A-B) characters and numbers (0-9)." id="password" type="password" class="form-control" name="password" onchange="validatePassword(this)"  placeholder="Password">
 
                                 </div>
                                 <br>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                    <input id="passwordCheck" type="password" class="form-control" name="passwordCheck" required placeholder="Confirm Password">
+                                    <input id="passwordCheck" type="password" class="form-control" name="passwordCheck"  placeholder="Confirm Password">
                                 </div>
                                 <br>
                                 <a href=login.php>Already a user?</a>

@@ -20,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = mysqli_query($conn, $sql);
     // echo $result;
     $num = mysqli_num_rows($result);
+    
     if ($num || $num == 1) {
         $login = true;
         session_start();
