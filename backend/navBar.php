@@ -45,7 +45,6 @@
   </div>
 </nav>
 
-
 <?php 
 include_once 'userProfile.php';
 ?>

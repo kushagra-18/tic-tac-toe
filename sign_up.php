@@ -192,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <input id="passwordCheck" type="password" class="form-control" name="passwordCheck"  placeholder="Confirm Password">
                                 </div>
                                 <br>
-                                <a href=login.php>Already a user?</a>
+                                <a href=Views/loginView.php>Already a user?</a>
                                 <br>
                                 <br>
 
