@@ -21,12 +21,29 @@ if (isset($_SESSION['loggedin'])) {
 
 class Controller extends User
 {
-    public function __construct($username, $password)
+    public function __construct($username, $password, $confirmPassword, $email, $fullname)
     {
+
         $this->username = $username;
         $this->password = $password;
+        $this->email = $email;
+        $this->fullname = $fullname;
+        $this->confirmPassword = $confirmPassword;
 
     }
+
+
+    public function signupController(){
+
+        try{
+            $this->signupUser($this->username, $this->password, $this->confirmPassword, $this->email, $this->fullname);
+        }
+        catch(Exception $e){
+            $this->showError = $e->getMessage();
+        }
+
+    }
+
 
     public function loginController()
     {

@@ -2,17 +2,17 @@
 <html lang="en">
 
 <?php
-include '../Controllers/login.php';
-
-
+include '../Controllers/controlUsers.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $username = $_POST["username"];
     $password = $_POST["password"];
-
+    $confirmPassword = null;
+    $email = null;
+    $fullname = null;
     try {
-        $login = new Controller($username, $password);
+        $login = new Controller($username, $password, $confirmPassword, $email, $fullname);
         $login->loginController();
 
         $showError = $login->showError;
@@ -22,7 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo 'Caught exception: ', $e->getMessage(), "\n";
     }
 }
-
 
 ?>
 
@@ -124,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <input id="password" type="password" class="form-control" name="password" required placeholder="Password">
                                 </div>
                                 <br>
-                                <a href=../sign_up.php>New user?</a>
+                                <a href="../Views/signupView.php">New user?</a>
                                 <br>
                                 <br>
                                 <?php

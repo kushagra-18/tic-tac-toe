@@ -32,5 +32,7 @@ class dbConnect
             echo "Connection failed: " . $e->getMessage();
         }
 
+        return $conn;
+
     }
 }
