@@ -37,7 +37,7 @@
           <a class="dropdown-item" data-toggle="modal" data-target="#userProfile">Profile</a>
           <a class="dropdown-item" href="change.php">Change Password</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="logout.php">Logout</a>
+          <a class="dropdown-item" href="/PHP/tic-tac-toe/logout.php">Logout</a>
         </div>
       </li>
 

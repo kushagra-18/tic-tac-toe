@@ -1,5 +1,8 @@
 <?php
 
+include_once("../Models/User.php");
+require_once '../backend/dbconnect.php';
+
 $login = false;
 $showError = false;
 session_start();
@@ -10,30 +13,32 @@ if (isset($_SESSION['loggedin'])) {
     exit;
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    include '../backend/dbconnect.php';
+/**
+ * @Description This is the the Class for the controller. inherit from User
+ * used for login and signup
+ */
 
-    $username = $_POST["username"];
-    $password = $_POST["password"];
 
-    $sql = "Select * from sign_up where username='$username' AND password='$password'";
-    // $sql = "Select * from users where username='$username'";
-    $result = mysqli_query($conn, $sql);
-    // echo $result;
-    $num = mysqli_num_rows($result);
-    
-    if ($num || $num == 1) {
-        $login = true;
-        session_start();
-        $_SESSION['loggedin'] = true;
-        $_SESSION['username'] = $username;
+class Controller extends User
+{
+    public function __construct($username, $password)
+    {
+        $this->username = $username;
+        $this->password = $password;
 
-        header("location: ../welcome.php");
-    } else {
-        $showAlert = true;
-        $showError = "Invalid Credentials";
+    }
+
+    public function loginController()
+    {
+        
+        try
+        {
+            $this->loginUser($this->username, $this->password);
+        }
+        catch (Exception $e)
+        {
+            echo 'Caught exception: ', $e->getMessage(), "\n";
+        }
     }
 }
-
-?>
 

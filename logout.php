@@ -5,6 +5,6 @@ session_start();
 session_unset();
 session_destroy();
 
-header("location: ../Controllers/login.php");
+header("location: /PHP/tic-tac-toe/Views/loginView.php");
 exit;
 ?>

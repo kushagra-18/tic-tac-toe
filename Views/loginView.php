@@ -3,6 +3,27 @@
 
 <?php
 include '../Controllers/login.php';
+
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+
+    try {
+        $login = new Controller($username, $password);
+        $login->loginController();
+
+        $showError = $login->showError;
+        $showAlert = $login->showAlert;
+
+    } catch (Exception $e) {
+        echo 'Caught exception: ', $e->getMessage(), "\n";
+    }
+}
+
+
 ?>
 
 <head>
@@ -90,7 +111,7 @@ include '../Controllers/login.php';
                             <h3 class="panel-title">Please log in</h3>
                         </div>
                         <div class="panel-body">
-                            <form action="../Controllers/login.php" method="post">
+                            <form action="../Views/loginView.php" method="post">
 
                                 <br>
                                 <div class="input-group">
