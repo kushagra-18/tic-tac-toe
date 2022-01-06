@@ -18,7 +18,7 @@ class User extends dbConnect
      *else error message is displayed.
      *@param $username
      *@param $password
-     *@return  {None}
+     *@return  {Boolean}
      *@author  Kushagra Sharma
      */
 
@@ -32,19 +32,13 @@ class User extends dbConnect
         $num = mysqli_num_rows($result);
 
         if ($num || $num == 1) {
-            $this->login = true;
-            session_start();
-            echo "Login Successful";
-            $_SESSION['loggedin'] = true;
-            $_SESSION['username'] = $username;
 
-            header("location: ../welcome.php");
-        } else {
-            $this->showAlert = true;
-            $this->showError = "Invalid Credentials";
-        }
+            $this->login = true;
+            return true;
     }
 
+    return false;
+}
 
     /**
      *@description The function is used to signup the user
@@ -74,7 +68,7 @@ class User extends dbConnect
             $exists = true;
         }
 
-            if ($password == $confirmPassword && $exists == false && self::validateUser($username, $password, $email, $fullname)) {
+            if ($password == $confirmPassword && $exists == false) {
                
                 //add current date to database
 
@@ -97,45 +91,44 @@ class User extends dbConnect
                 }
             }
         }
-
-    /**
-     * @description The function is used to validate the user input for signup
-     * using regex
-     * @param $username - username
-     * @param $password - password
-     * @param $confirmPassword - confirm password
-     * @param $email - email
-     * return  {Boolean} - true if valid else false
-     * @author  Kushagra Sharma 
-     */
-
-    private static function validateUser($password, $username,$exists,$email){
-
-        if (strlen($password) < 8) {
-            $showError = "Password must be at least 8 characters long";
-            return false;
-        } else if (!preg_match("#[0-9]+#", $password)) {
-            $showError = "Password must include at least one number";
-            return false;
-        } else if (!preg_match("#[A-Z]+#", $password)) {
-            $showError = "Password must include at least one uppercase letter";
-            return false;
-        } else if (!preg_match("#[a-z]+#", $password)) {
-            $showError = "Password must include at least one lowercase letter";
-            return false;
-        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $showError = "Invalid email format";
-            return false;
-        } else if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
-            $showError = "Username must contain only letters and numbers";
-            return false;
-        } else if ($exists == true) {
-            $showError = "Username or email already exists";
-            return false;
-        }else{
-            return true;
-        } 
     }
-}
 
-?>
+//     /**
+//      * @description The function is used to validate the user input for signup
+//      * using regex
+//      * @param $username - username
+//      * @param $password - password
+//      * @param $confirmPassword - confirm password
+//      * @param $email - email
+//      * return  {Boolean} - true if valid else false
+//      * @author  Kushagra Sharma 
+//      */
+
+//     private static function validateUser($password, $username,$exists,$email){
+
+//         if (strlen($password) < 8) {
+//             $showError = "Password must be at least 8 characters long";
+//             return false;
+//         } else if (!preg_match("#[0-9]+#", $password)) {
+//             $showError = "Password must include at least one number";
+//             return false;
+//         } else if (!preg_match("#[A-Z]+#", $password)) {
+//             $showError = "Password must include at least one uppercase letter";
+//             return false;
+//         } else if (!preg_match("#[a-z]+#", $password)) {
+//             $showError = "Password must include at least one lowercase letter";
+//             return false;
+//         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+//             $showError = "Invalid email format";
+//             return false;
+//         } else if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
+//             $showError = "Username must contain only letters and numbers";
+//             return false;
+//         } else if ($exists == true) {
+//             $showError = "Username or email already exists";
+//             return false;
+//         }else{
+//             return true;
+//         } 
+//     }
+// }
