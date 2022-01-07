@@ -14,7 +14,7 @@ if (isset($_SESSION['loggedin'])) {
 }
 
 /**
- * @Description This is the the Class for the controller. inherit from User
+ * @Description This is the the Class for the controller. inherits from User
  * used for login and signup
  */
 
@@ -40,7 +40,19 @@ class Controller extends User
         }
 
         try {
-            $this->signupUser($this->username, $this->password, $this->confirmPassword, $this->email, $this->fullname);
+
+
+            if($this->signupUser($this->username, $this->password, $this->confirmPassword, $this->email, $this->fullname))
+            {
+                $this->showAlert = true;
+                $this->showError = "";
+
+            }
+            else
+            {
+                $this->showAlert = false;
+                $this->showError = "Pass words do not match";
+            }
         } catch (Exception $e) {
             $this->showError = $e->getMessage();
         }
@@ -99,7 +111,6 @@ class Controller extends User
         try {
             if ($this->loginUser($this->username, $this->password)) {
                 session_start();
-                echo "Login Successful";
                 $_SESSION['loggedin'] = true;
                 $_SESSION['username'] = $this->username;
 

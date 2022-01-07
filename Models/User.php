@@ -35,10 +35,10 @@ class User extends dbConnect
 
             $this->login = true;
             return true;
-    }
+        }
 
-    return false;
-}
+        return false;
+    }
 
     /**
      *@description The function is used to signup the user
@@ -68,67 +68,17 @@ class User extends dbConnect
             $exists = true;
         }
 
-            if ($password == $confirmPassword && $exists == false) {
-               
-                //add current date to database
+        if ($password == $confirmPassword && $exists == false) {
 
-                $date = date("Y-m-d");
-                $sql = "INSERT INTO sign_up (name, email, password,username,createdOn) VALUES ('$fullname', '$email', '$password','$username','$date')";
-                $result = mysqli_query($this->dbconnect(), $sql);
+            //add current date to database
 
-                $sqlLeaderboard = "INSERT INTO leaderboard (username,score) VALUES ('$username',0)";
-                $resultLeaderboard = mysqli_query($this->dbconnect(), $sqlLeaderboard);
+            $date = date("Y-m-d");
+            $sql = "INSERT INTO sign_up (name, email, password,username,createdOn) VALUES ('$fullname', '$email', '$password','$username','$date')";
+            $result = mysqli_query($this->dbconnect(), $sql);
 
-                if (!$resultLeaderboard) {
-                    //sql error
-                    echo "Error: " . $sqlLeaderboard . "<br>" . mysqli_error($this->dbconnect());
-                }
-
-                if ($result) {
-                    $showAlert = true;
-                } else {
-                    $showError = "Passwords do not match";
-                }
-            }
+            return true;
         }
+
+        return false;
     }
-
-//     /**
-//      * @description The function is used to validate the user input for signup
-//      * using regex
-//      * @param $username - username
-//      * @param $password - password
-//      * @param $confirmPassword - confirm password
-//      * @param $email - email
-//      * return  {Boolean} - true if valid else false
-//      * @author  Kushagra Sharma 
-//      */
-
-//     private static function validateUser($password, $username,$exists,$email){
-
-//         if (strlen($password) < 8) {
-//             $showError = "Password must be at least 8 characters long";
-//             return false;
-//         } else if (!preg_match("#[0-9]+#", $password)) {
-//             $showError = "Password must include at least one number";
-//             return false;
-//         } else if (!preg_match("#[A-Z]+#", $password)) {
-//             $showError = "Password must include at least one uppercase letter";
-//             return false;
-//         } else if (!preg_match("#[a-z]+#", $password)) {
-//             $showError = "Password must include at least one lowercase letter";
-//             return false;
-//         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-//             $showError = "Invalid email format";
-//             return false;
-//         } else if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
-//             $showError = "Username must contain only letters and numbers";
-//             return false;
-//         } else if ($exists == true) {
-//             $showError = "Username or email already exists";
-//             return false;
-//         }else{
-//             return true;
-//         } 
-//     }
-// }
+}
